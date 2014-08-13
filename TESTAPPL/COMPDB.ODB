@@ -1,0 +1,25 @@
+Odb_Version_0.1_Database_file CompanyDb 100 10
+Type Usertypes Props /Props Index /Index
+Type Person Subtype_of Usertypes Props Name 3 /Props Index Name /Index
+Type Employee Subtype_of Person Props Salary 0 /Props Index Name /Index
+Type Supervisor Subtype_of Employee Props BossOf 4 /Props Index Name /Index
+Type Group Subtype_of Usertypes Props Members 5 /Props Index /Index
+Type Department Subtype_of Group Props Name 3 /Props Index /Index
+/Database Objects Type Person Instance 6 /Instance
+Type Employee Instance 7 /Instance
+Type Supervisor Instance 8 /Instance
+Type Group Type Department Instance 9 /Instance
+/Objects Objects Type Person Instance 6 Name 3 
+Natalie
+/Instance
+Type Employee Instance 7 Salary 0 10000 Name 3 
+Staffan
+/Instance
+Type Supervisor Instance 8 BossOf 4  9 Salary 0 50000 Name 3 
+Tom Tough
+/Instance
+Type Group Type Department Instance 9 Name 3 
+Software
+Members 5 4 { 8 }
+/Instance
+/Objects 

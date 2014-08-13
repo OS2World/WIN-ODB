@@ -1,0 +1,219 @@
+<!----------------------------------------------------------------->
+<!-- FILE       : ODBINTRO.HTM                                   -->
+<!-- DESCRIPTION: Part of ODB documentation package.             -->
+<!-- AUTHOR     : Staffan Flodin                                 -->
+<!----------------------------------------------------------------->
+<HTML>
+<TITLE> ODB Users Guide Inrtoduction</TITLE>
+<BODY> <body bgcolor="#ffffff" text="#000038" link="#002080" alink="#0000ff"
+vlink="#001050">
+<CENTER>
+<pre>
+<a href = "odbdoc.htm"><IMG SRC="tab1b.gif" BORDER=0></a><a href = "odbintro.htm"><IMG SRC="tab2w.gif" BORDER=0></a><a href = "odbschema.htm"><IMG SRC="tab3b.gif" BORDER=0></a><a href = "odbqueries.htm"><IMG SRC="tab4b.gif" BORDER=0></a><a href = "odbmisc.htm"><IMG SRC="tab5b.gif" BORDER=0></a><a href = "odbexample.htm"><IMG SRC="tab6b.gif" BORDER=0></a>
+</pre>
+<BR>
+
+<TABLE>
+<TR>
+	<TD><IMG SRC="ball.gif" ALT="A Ball" ALIGN = CENTER>
+	<TD><CENTER>
+		<FONT SIZE=+6>ODB for Win95/NT</FONT>
+		<BR>
+		<FONT SIZE=+2>An Object-Oriented Database V. 0.1</FONT><BR>
+		<I>Mail to: <A HREF="mailto:sflodin@ozemail.com.au">ODB for Win 95 / NT</A></I>
+	   </CENTER>
+	<TD><IMG SRC="tri.gif" ALT="A pink thing" ALIGN = CENTER>
+</TABLE>
+
+</CENTER>
+<HR>
+<A NAME="1.0">
+<H1>1.0	  Introduction</H1></A>
+
+In most application development a considerable time is spent on developing
+data management at the client. Common data structures are linked lists,
+tables etc. One step in the right direction is to use STL or MFS'c 
+to utilise already tested and proven container classes.
+<BR><BR>
+Still, using STL or MFC the programmer is not relieved the strain of having to choose and tailor 
+the utilisation of the selected container classes. Also none of the 
+containers will give access to data stored in some other container or provide any means of 
+modelling the relations between the data stored in the different containers.
+Hence the program must not only have knowledge about what data is available
+it must also know where it is stored. Using <B>ODB</B> all this overhead is
+in your software project is eliminated.
+<BR><BR>
+Using <B>ODB</B> will reduce the time and hence the cost of <I>any</i>
+software project that handles data (which most do). <B>ODB</B> is optimized towards
+speed and memory utlisation.
+<BR><BR>
+Hence, <B>ODB</B> provides a lightweight main memory Object Oriented database with 
+persistent objects. Using <B>ODB</B> the developer uses a GUI to model the data,
+(or the API, or the ODBQL) and he retrieves the data through the powerful query interface
+proveded by the <B>ODB</B> API.
+<BR>
+<BR>
+The database engine is accessed by applicaions through a simple and consistent
+<I>application programming interface</I>, API. <B>ODB</B> is a light-weight
+single- user main-memory object-oriented database.
+
+
+<UL>
+<LI><B>ODB</B> supports, subtyping, inheritance, complex 	objects and all
+objects have a unique identity
+	hence <B>ODB</B> is object-oriented.</LI>
+<LI> It always keeps the data in main memory, thus it is 	primarily intended
+for applications with
+	moderately sized data requirements. It uses secondary 	storage only for
+	storing the
+	database between sessions.</LI>
+<LI>It is light-weight because some of the traditional database 	facilities
+such as locking and logging
+	does not exist in <B>ODB</B>. The reason is that it is 	intended to be used
+	as a fast and easy to
+	use storage and search module in any application 	where traditionally the
+	application developer
+	 programmed the data storage, e.g. as sequential file 	scans etc.</LI>
+<LI>It differs from other C++ based object-oriented databases
+	in that it is dynamic in nature. Hence your application
+	is linked and compiled once and the database schema
+	is created or changed dynamically without any 
+	recompilation of the application.
+</UL>
+
+<A NAME="2.0">
+<H1>2.0	  <B>ODB</B> system</H1></A>
+
+The <B>ODB</B>-system consists of two parts: A graphical user interface for
+creation and maintenance of the database and a C++ API for accessing the
+database engine from another application.
+<BR><BR>
+<CENTER>
+<IMG SRC="fig1.gif" ALT="System Overview">
+<BR>
+<I>Figure 1. System Overview</I>
+<BR><BR>
+</CENTER>
+
+The graphical user interface faciliates creation, update and deletion of types,
+properties and objects in an easy manner. The interface also supports loading,
+saving and creation of <B>ODB</B>-databases.
+<BR>
+The C++ API gives any application access to a set of high-level easy to use
+interface methods to the database engine. The API gives the application access to the same functionality which is available in the user interface. In addition, the API also provides a powerful <I>stream based query interface</I> to the database.
+
+<A NAME="2.1">
+<H2>2.1	  Using <B>ODB</B> for Win 95 / NT</H2></A>
+
+The on-line version of <B>ODB</B> contains all functionality of the system,
+except the persistenct i.e. it is a special shareware version. 
+If you use <B>ODB</B> and find it useful the cost is US$99. 
+Send an e-mail to <a href="mailto:sflodin@ozemail.com.au">ODB for Win 95 / NT</a> for further
+details.
+
+<A NAME="2.2">
+<H2>2.2	  Files</H2></A>
+
+<B>ODB</B> consists of the following files:
+
+
+<UL>
+<LI>pmstore.exe.The <B>ODB</B> creation and maintenance interface. It uses ODB.DLL.</LI>
+<LI>ODB.h. <B>ODB</B>  C++ header file.</LI>
+<LI>ODB.lib.The <B>ODB</B> library for static linking (<I>Borland C++ .lib</I>).</LI>
+<LI>ODB.DLL. The <B>ODB</B> library for dynamic linking.</LI>
+<LI>ODB.DEF. A listing of the dynamic link library. </LI>
+<LI>Compdb.odb. Sample <B>ODB</B> database file.</LI>
+<LI>Demo.cpp. Sample <B>ODB</B> application source code.</LI>
+<LI>Demo.def. Used by demo.cpp to link at compile time. (<I>Borland C++ file, may need rewrite for other compilers/linkers</I>)</LI>
+</UL>
+
+
+<A NAME="2.3"><H2>2.3	  System Requirements</H2></A>
+
+The system is intended to run under Win95 / NT V4 or higher. Any other
+requirements does not exist.
+
+<A NAME="3.0">
+<H1>3.0	  System overview of <B>ODB</B></H1></A>
+
+An <B>ODB</B>-database is a collection of <I>types</I> with <I>properties</I>
+and <I>objects</I> which are instances of types. <B>ODB</B>-types are instances
+of the system class <I>usertypes</I> and <B>ODB</B>-objects are instances of the
+<I>object</I> system class <A HREF="odbschema.htm#FIGURE3> see Figure 3</A>.
+<BR>
+<CENTER>
+<IMG SRC="fig2.gif" ALT="System Class Hierarchy">
+<BR>
+<A NAME="FIGURE2">
+Figure 2. System Class  hierarchy</A>
+<BR>
+</CENTER>
+
+The types are organized in a <I>subtype-supertype</I> hierarchy where subtypes
+<I>inherit</I> all properties defined or inherited to its supertype. In addition
+ to the inherited properties new properties can be created.
+A property is a name which <I>denotes values of objects</I>. Properties can
+denote values of the following <B>ODB</B>-database types:
+
+
+<UL>
+<LI>Integer
+<LI>Real
+<LI>Charstring
+<LI>Object reference
+<LI>Collection of Integer
+<LI>Collection of Real
+<LI>Collection of Charstring
+<LI>Collection of object reference.
+</UL>
+
+
+<B>ODB</B>-objects are instances of <B>ODB</B>-types where all properties
+defined or inherited to the type can be assigned values for the object.
+<BR>
+Objects can be retreived by their property values. And the <I>extent</I> of a
+type, i.e. the objects that belongs to a particular type and all subtypes to
+that type, can be queried through a stream based query interface. To facilitate
+fast look-up of objects <I>indexes</I> can be built over some or all of the
+properties of a type.
+<BR>
+The database can easily be updated or altered in the following ways:
+
+
+<UL>
+<LI>Type creation
+<LI>Property creation
+<LI>Object creation
+<LI>Index creation
+<LI>Type deletion
+<LI>Property deletion
+<LI>Object deletion
+<LI>Index deletion
+<LI>Object modification.
+</UL>
+
+
+<I>Integrity constraints</I> will be maintained by the system when types or
+objects are deleted or modified. All properties and indexes are inherited
+automatically to any newly created subtype of a particular type.
+
+<HR>
+<CENTER>
+<BR>
+<TABLE>
+<TR>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+	<TD> <CENTER>
+		<FONT SIZE=-2>ODB for Win95 / NT</FONT>
+		<FONT SIZE=-3>An Object-Oriented Database V. 0.1<BR>
+		<I>Mail to<A HREF="mailto:sflodin@ozemail.com.au">
+		ODB for Win 95 / NT</A></I></CENTER>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+</TABLE>
+</CENTER>
+<HR>
+
+
+</BODY>
+</HTML>

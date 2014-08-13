@@ -1,0 +1,6 @@
+#include <windows.h>
+
+LRESULT CALLBACK WindowFunc(HWND,UINT,WPARAM,LPARAM);
+
+char szWinName[]="ODB Gis";
+

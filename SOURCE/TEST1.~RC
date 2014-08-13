@@ -1,0 +1,52 @@
+/****************************************************************************
+
+
+test1.rc
+
+produced by Borland Resource Workshop
+
+
+*****************************************************************************/
+
+#define DIALOG_1	1
+#define IDC_LISTBOX1	10
+#define IDC_COMBOBOX1	11
+#define IDC_PUSHBUTTON1	12
+#define IDC_PUSHBUTTON2	13
+#include "test.rc"
+
+MENU_1 MENU 
+{
+ POPUP "database"
+ {
+  MENUITEM "save", CM_POPUPITEM
+ }
+
+}
+
+
+MENU_2 MENU 
+{
+ POPUP "class"
+ {
+  MENUITEM "new", CM_POPUPITE1
+ }
+
+}
+
+DIALOG_1 DIALOG 9, 19, 269, 175
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CLASS "classname"
+CAPTION "Title"
+FONT 8, "MS Sans Serif"
+{
+ DEFPUSHBUTTON "OK", IDOK, 148, 6, 50, 14
+ PUSHBUTTON "Cancel", IDCANCEL, 148, 24, 50, 14
+ PUSHBUTTON "Help", IDHELP, 148, 42, 50, 14
+ CONTROL "outtitle", IDC_LISTBOX1, "LISTBOX", LBS_STANDARD, 3, 96, 49, 75
+ CONTROL "combobox", IDC_COMBOBOX1, "COMBOBOX", CBS_DROPDOWNLIST | WS_TABSTOP, 59, 14, 49, 33
+ PUSHBUTTON "Button", IDC_PUSHBUTTON1, 136, 107, 50, 14
+ CONTROL "konstigbutton", IDC_PUSHBUTTON2, "BorBtn", BS_PUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 129, 137, 29, 21
+ LTEXT "entryfield", -1, 104, 80, 75, 20, NOT WS_GROUP | WS_BORDER
+ CONTROL "textruta", -1, "BorStatic", SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 187, 77, 46, 24
+}

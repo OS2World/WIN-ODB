@@ -1,0 +1,20 @@
+//--------------------------
+//     c o m m e n t
+//--------------------------
+create type person;
+
+create variable p is person;
+
+create type otto subtype of person;
+
+create type kodd subtype of person
+        properties friend->person, salary->integer;
+
+create properties name->charstring,money->integer on person;
+
+set p=create instance of person set name="kodde",money=125;
+
+create instance of kodd set friend=p;
+
+//set p.name="Staffe";
+//set i=a/b;

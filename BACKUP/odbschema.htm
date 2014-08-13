@@ -1,0 +1,402 @@
+<!----------------------------------------------------------------->
+<!-- FILE       : ODBSCHEMA.HTM                                  -->
+<!-- DESCRIPTION: Part of ODB documentation package.             -->
+<!-- AUTHOR     : Staffan Flodin                                 -->
+<!----------------------------------------------------------------->
+<HTML>
+<TITLE> ODB Users Guide Schema creation</TITLE>
+<BODY> <body bgcolor="#ffffff" text="#000038" link="#002080" alink="#0000ff"
+vlink="#001050">
+<CENTER>
+<pre>
+<a href = "odbdoc.htm"><IMG SRC="tab1b.gif" BORDER=0></a><a href = "odbintro.htm"><IMG SRC="tab2b.gif" BORDER=0></a><a href = "odbschema.htm"><IMG SRC="tab3w.gif" BORDER=0></a><a href = "odbqueries.htm"><IMG SRC="tab4b.gif" BORDER=0></a><a href = "odbmisc.htm"><IMG SRC="tab5b.gif" BORDER=0></a><a href = "odbexample.htm"><IMG SRC="tab6b.gif" BORDER=0></a>
+</pre>
+<BR>
+
+<TABLE>
+<TR>
+	<TD><IMG SRC="ball.gif" ALT="A ball" ALIGN = CENTER>
+	<TD><CENTER>
+		<FONT SIZE=+6>ODB for Win95/NT</FONT>
+		<BR>
+		<FONT SIZE=+2>An Object-Oriented Database V. 0.1</FONT><BR>
+		<I>Mail to: <A HREF="mailto:sflodin@ozemail.com.au">ODB for Win 95 / NT</A></I>
+	   </CENTER>
+	<TD><IMG SRC="tri.gif" ALT="A pyramid" ALIGN = CENTER>
+</TABLE>
+
+
+</CENTER>
+<HR>
+
+
+<A NAME="4.0"><H1>4.0	  Database operations</H1></A>
+<P>
+In this section the <B>ODB</B>-database engine methods in the API are described
+and exemplified as C++ examples. Throughout the examples a database object
+named <I>My_DB</I> is used to exemplify the <B>ODB</B>-API.
+</P>
+
+<A NAME="4.1"><H2>4.1	  Database creation</H2></A>
+<P>
+<CENTER>
+<IMG SRC="fig3.gif" ALT="The ODB Database Object">
+<BR>
+<A NAME="FIGURE3">
+Figure 3. The ODB-database object
+</A>
+<BR>
+</CENTER>
+
+The <B>ODB</B>-API contains a C++ class named <I>database</I> see
+<A HREF="#FIGURE3">Figure 3</A>. The database object in your application is a
+particular important object. It is through the database object which all
+accesses to the <B>ODB</B>-database and all calls to the database engine go.
+</P>
+<P>
+The database object contains the <I>database name,</I> an <B>ODB</B>-type named
+<I>Usertypes</I>, an object identifier (<I>OID</I>) generator and a <I>string
+table</I>.
+</P>
+<P>
+The name of the database object is assigned to it at creation or when the
+database is loaded from file.
+The type <I>Usertypes</I> is the root of the user defined type tree. This type
+can not be given user defined properties and objects can not be created from it.
+ Thus, if a type is created without a specified supertype the type named
+ Usertypes will become its supertype by default.
+</P>
+<P>
+The <I>string table</I> is a character string repository. All strings used in
+the database are stored in this table. This facilitates fast look-up of string
+valued properties. There are som cases where the application must access the
+string table but in most cases <B>ODB</B> handles this for the application.
+</P>
+<P>
+The OID generator generates OIDs for all new objects or types in the database.
+The OID can not be changed by the application and the application must never
+reference object by their OID's as the OIDs of the objects may change when the
+database is loaded again.
+</P>
+<P>
+If your application only needs one database this database is declared in your
+application as:
+<PRE>
+database My_DB("DBName");
+</PRE>
+
+This statement declares the object <I>My_DB</I> to be an <B>ODB</B>-database
+object with name <I>DBname</I>. All applications using <B>ODB</B> must have a
+database object. There is no limit set by <B>ODB</B>to the number of databases
+a single application can use.
+</P>
+<P>
+If several databases are required in the application these can be created
+dynamically by using the C++ new-operator as:
+
+<PRE>
+new database("OneMoreDB");
+</PRE>
+
+The database can be saved and restored from file as:
+<PRE>
+database My_DB;
+My_DB.load_database("Db1.odb");
+My.DB.save_database("Db1.odb");
+</PRE>
+In above statements the database object <I>My_DB</I> is first loaded and then
+saved with file name <I>Db1.odb</I>.
+</P>
+
+<A NAME="4.2"><H2>4.2	  Type creation</H2></A>
+<P>
+An <B>ODB</B>-type serve as a template for object creation. Properties and
+indexes are defined on types. A type can be declared as a subtype to any other
+type previously defined. If no supertype is declared then the new type will
+become subtype to the type named <I>Usertypes</I> in the database object.
+<B>ODB</B>-types are instances of the system type named type,
+<A HREF="#FIGURE2">see Figure 2</A>.
+</P>
+<P> 
+An <B>ODB</B>-type inherits all properties defined to its supertype. Any indexes
+ defined to the supertype will also be defined to the new type. Types are
+ created by the <B>ODB</B>-database object as:
+<PRE>
+My_DB.create_type("Person");
+My_DB.create_type("Employee","Person");
+</PRE>
+Here a type named <I>Person</I> is first created. A supertype has not been
+specified thus the type named Person will be a subtype of the type
+<I>Usertypes</I> in the database object <I>My_DB</I>. In the next example a type
+ named <I>Employee</I> is created as a subtype to the type named Person.
+</P>
+<P>
+If several databases are active in some application there may be types eith
+identical names in the different databases. Since references to types go through
+ the database object there is never any ambiguity when referencing types by
+ their names.
+</P>
+<P> 
+The return value from the <I>create_type</I>-statement is a reference to the new
+ type or the NULL-reference if the type creation failed. The following example
+ declares a type reference that can be bound to the return value from the
+ create_type statement:
+<PRE>
+ODB_TYPE My_NewType;
+My_NewType=My_DB.create_type("Person");
+</PRE>
+The return value need to be assigned a reference. The type is inserted in the
+type hierarchy of the database and can be referenced by its name whenever
+required.
+</P>
+
+<A NAME="4.3"><H2>4.3	  Property Creation</H2></A>
+<P>
+Properties are defined to types and for the objects of that type the properties
+can be given values. Properties are typed where the following types together
+with their identifiers are supported:
+<CENTER>
+<TABLE BORDER=1>
+<TH>Type <TH>Type tag
+<TR><TD>Integer<TD>_INT_
+<TR><TD>Real<TD>_REAL_
+<TR><TD>Charstring<TD>_CHAR_
+<TR><TD>Object reference<TD>_OBJECT_
+<TR><TD>Collection of Integer<TD>_INT_COLLECTION_
+<TR><TD>Collection of Real<TD> _REAL_COLLECTION_
+<TR><TD>Collection of Charstring <TD>_CHAR_COLLECTION_
+<TR><TD>Collection of object reference.<TD> _OBJECT_COLLECTION_
+</TABLE>
+</CENTER>
+</P>
+<P>
+To create an integer valued property named salary to the type named employee in
+the database <I>My_DB</I> we write:
+<PRE>
+My_DB.add_property("Employee","Salary",_INT_);
+</PRE>
+Analogously, an object valued property named Boss is created as:
+<PRE>
+My_DB.add_property("Employee","Boss",_OBJECT_);
+</PRE>
+The return value is either less than or greater than zero if the operation
+failed or succeeded, respectively.
+</P>
+<P>
+The <I>add_property</I>-statement can be executed any time and all subtypes to
+the target type that may exist will also be given the property. All instances to
+ the types which has been given a new property will also be given the property.
+ The value however will be undefined and it is up to the application that the
+ value is not referenced prior to being assigned a value.
+<P>
+
+<A NAME="4.4"><H2>4.4	  Object creation</H2></A>
+<P>
+Objects are created as instances to a particular type. When objects are created
+these are given all the properties defined to the type. The values of the
+properties are undefined and must be assigned values prior to being referenced.
+</P>
+<P>
+To create an instances of the type named Person in the database <I>My_DB</I>
+we write:
+<PRE>
+My_DB.create_instance("Person");
+</PRE>
+The return value is a reference to the newly created object or the NULL
+reference. To declare a variable which can be assigned the result of the
+create_instance operation we write:
+<PRE>
+ODB_REF My_NewObj;
+My_NewObj=My_DB.create_instance("Person");
+</PRE>
+The return value may be discarded but then there is a problem in referencing the
+object at a later stage. Perhaps the best procedure is to create an object and
+keep a reference to it. This reference can then be used when the properties of
+the objects are assigned values. When values are assigned to its properties the
+reference may be discarded and the object can at a later stage be referenced
+through its attribute values. This is easily done through the <A HREF="#5.0">
+query interface </A>described later in this manual.
+</P>
+
+<A NAME="4.5"><H2>4.5	  Object modification</H2></A>
+<P>
+Object modification means changing the values of its properties. This is done by
+ using sending the message <I>set_propertyvalue</I> to the database object as:
+<PRE>
+My_DB.setproperty_value(My_NewObj,"Salary",(ODB_INT)53200);
+</PRE>
+Where <I>My_NewObj</I> is an <B>ODB</B>-object declared and created e.g as:
+<PRE>
+ODB_REF My_NewObj;
+My_NewObj=My_DB.create_instance("Employee");
+</PRE>
+The object is given the value 53200 for the property named Salary. Note that
+constants may require type casting for disambiguation purposes. In this example
+ the constant 53200 is casted to the type ODB_INT.
+The result from the database method <I>setproperty_value</I> is greater than or
+ less than zero if the operation was successful or failed, respectively.
+</P>
+<P>
+When property values are modified all indexes are automatically updated to
+consider the new value for the property.
+</P>
+<A NAME="4.6"><H2>4.6	  Index creation</H2></A>
+<P>
+To make retrievals through some property fast, indexes can be created. For
+example if a frequent search in the database is on a particular attribute e.g.
+Salary then an index should be created on that attribute to facilitate fast
+access to the objects with a particular value for the attribute named Salary.
+</P>
+<P>
+Indexes are created from the database object through the <I>create_index</I>
+method. The following example creates an index on the Salary property of the
+type Employee .
+<PRE>
+My_DB.create_index("Employee","Salary");
+</PRE>
+Note that if an index is created to some attribute of a particular type the
+index will also be created to that attribute in all subtypes. In above example
+any subtype to Employee will get an index on the salary property. It does not
+matter if the index is created before or after the subtypes are created. It does
+ not matter if instances to the types the index is created over has been
+ created. All existing instances will be entered into the index structures
+ automatically by <B>ODB</B>.
+</P>
+
+<A NAME="4.7"><H2>4.7	  Type deletion</H2></A>
+<p>
+Types can be deleted from the database dynamically. This is a particularly
+costly operation. When a type is deleted so are the subtypes to the type as
+well as all objects that are instances to the type or to any subtype of the
+type. Hence, A type deletion is a recursively applied down the type tree rooted
+at the specified type to delete.
+</P>
+<P>
+Types are deleted by the database object by sending the <I>delete_type</I>
+message. The result of the operation is either greater than or less than zero if
+ the operation was successful or failed, respectively.
+To delete the type Person from the database <I>My_DB</I> we write:
+<PRE>
+My_DB.delete_type("Person");
+</PRE>
+This will delete the type named Person, all instances of that type and then
+recursively delete all subtypes to the Person type. This operation can be costly
+ to perform when there are a lot of objects and types that has to be deleted and
+	their memory freed.
+</P>
+<P>
+Note especially that any references maintained by the application to types or
+objects which have been deleted must be reset by the application. Dereferncing
+such a reference is an undefined operation.
+</P>
+<A NAME="4.8"><H2>4.8	  Property deletion</H2></A>
+<P>
+Single properties can be deleted from types. When a property is deleted from
+some type it is deleted from all subtypes as well.
+</P>
+<P>
+When a property is deleted from a type the property is also deleted from all
+object that are instances to that type, i.e. the extent of the type.
+</P>
+<P>
+Properties are deleted from types by sending the <I>delete_property</I> message
+to the database object.
+To delete the property named Salary from the type named Employee in the database
+ <I>My_DB</I> we write:
+<PRE>
+My_DB.delete_propery("Employee","Salary");
+</PRE>
+Note that if the property that is to be deleted is inherited to the specified
+type that property can not be deleted as that would leave the database schema in
+ an inconsistent state. To properly delete a property it must be deleted from
+ the most general type it is defined for. (<I>A supertype is more general than
+ its subtypes</I>)
+</P>
+<P>
+This is because the object-oriented model states that any operation <I>op</I>
+applicable to a type <I>t</I> is also applicable to all subtypes of the type
+<I>t</I>. Hence, deleting an inherited property would violate this constraint.
+</P>
+
+<A NAME="4.9"><H2>4.9	  Delete Object</H2></A>
+<P>
+Objects may be deleted. When an object is deleted the system automatically
+deletes all references to that object from other objects in the database. Any
+references kept by the application to the deleted object must be reset by the
+application itself.
+</P>
+<P>
+Objects are deleted by sending the <I>delete_object</I> message to the database.
+ When deleting an object the database object must be provided a handle to the
+ object that are subject of deletion.
+</P>
+<P> 
+A handle can be obtained through the <A HREF="#5.0">query interface</A> or
+<A HREF="#8.4">other methods</A> that returns object handles.
+</P>
+<P>
+To exemplify, consider the following example where a handle <I>obj</I> is
+declared. This handle is then assigned an object through the
+<I>getobjectwithoid</I> method. This object is then deleted by the database
+object:
+<PRE>
+//Declare object handle,
+//database and an integer
+
+ODB_REF obj;
+database My_DB("ExDB");
+ODB_INT i=0;
+
+My_DB.create_type("Person");
+
+//Create 500 objects
+while(i++ &lt 500) My_DB.create_object("Person");
+
+//Assign an object to the handle, We can be 
+//quite certan there is an object with OID 415 now
+obj=My_DB.getobjectwithoid("Person", 415);
+
+//Delete the object
+//If there were no object with OID=415
+//then obj==NULL but that is all handeled
+//by ODB
+My_DB.delete_object(obj);
+</PRE>
+Any other object that reference the deleted object through some attribute will
+now have that attribute value set to NULL. Note that in this example the object
+handle <I>obj</I> is outside the control of <B>ODB</B> and must not be used by
+the application after the deletion. This is up to the application programmer
+to see to.
+</P>
+<A NAME="4.10"><H2>4.10	  Delete index</H2></A>
+<P>
+Indexes may be deleted by sending the <I>drop_index</I> message to the database
+object.
+In the following example the index over Salary for type Employee in database
+<I>My_DB</I> is deleted:
+<PRE>
+My_DB.drop_index("Employee","Salary");
+</PRE>
+The result is greater or less than zero if the operation was successful or
+failed respectively.
+</P>
+
+
+<HR>
+<CENTER>
+<BR>
+<TABLE>
+<TR>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+	<TD> <CENTER>
+		<FONT SIZE=-2>ODB for Win95 / NT</FONT>
+		<FONT SIZE=-3>An Object-Oriented Database V. 0.1<BR>
+		<I>Mail to<A HREF="mailto:sflodin@ozemail.com.au">
+		ODB for Win 95 / NT</A></I></CENTER>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+</TABLE>
+</CENTER>
+<HR>
+
+</BODY>
+</HTML>

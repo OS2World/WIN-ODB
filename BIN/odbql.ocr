@@ -1,0 +1,68 @@
+// --------------------------------------------------------------------------
+// FILE        : odbql.ocr   ODB QueryLanguage . Object Script
+// AUTHOR      : Staffe
+// DESCRIPTION : A sample odbql file
+// --------------------------------------------------------------------------
+     create type person;
+
+     create type employee subtype of person
+                 properties boss->person, salary->integer;
+
+//
+// Create properties mom & dad on person. Recall from previous sections
+// that student and employees are subtypes to person. Hence after
+// this statement the properties mom, dad are available through inheritance
+// to the types employee and student
+//
+     create properties mom->person, dad->person, name->charstring on person;
+
+//
+// The following will cause a type error since the type
+// department does not exist;
+//
+//     create properties department->department on employee;
+
+
+//
+// So, lets create it
+//
+     create type department properties name->charstring;
+
+
+
+//
+// Instaed of having a reference from the employee to the department
+// model it as the employees are an attribute of the department.
+// hence, we add the following property on department;
+     create properties staff->set of employee on department;
+
+
+create instance of person;
+
+create instance of employee set name="Staffe", salary=20000;
+
+create instance of department set name="Sales";
+
+
+
+create variable p is person;
+create variable p1 is person;
+create variable d is department;
+
+set p=create instance of person set name="Adam";
+set p1=create instance of person set name="Eve";
+create instance of person set mom=p1, dad=p, name="ODB";
+
+create variable setvar is set of person;
+
+// set setvar={p,p1};
+
+create instance of department set name="Management", staff={p,p1};
+
+
+
+
+
+
+
+

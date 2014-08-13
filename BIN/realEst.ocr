@@ -1,0 +1,22 @@
+create type Suburb properties name->charstring, postcode->integer;
+
+create type Property properties price->integer, street->charstring,
+	suburb->Suburb, nofBeds->integer, streetNo->integer; 
+
+
+create type Unit subtype of Property properties unitNo->integer;
+
+create type House subtype of Property;
+
+//Address,Beds,Property Type,Features,Agent,Date,Result,* = Sold,Price
+
+create instance of Suburb set name="Cromer", postcode=2099;
+
+create instance of House set price=308000, street="Alfred St", 
+	streetNo=207,nofBeds=2;
+
+create instance of House set price=259000, street="Alfred St", 
+	streetNo=217,nofBeds=2;
+
+create instance of Unit set price=298000, street="Little Willandra Rd", 
+	streetNo=66, nofBeds=2, unitNo=2;

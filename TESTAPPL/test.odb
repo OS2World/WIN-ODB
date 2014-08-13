@@ -1,0 +1,6 @@
+Odb_Version_0.1_Database_file test 10 3
+Type Usertypes Props /Props Index /Index
+Type apa Subtype_of Usertypes Props realtype 1 /Props Index /Index
+/Database Objects Type apa Instance 2 /Instance
+/Objects Objects Type apa Instance 2 realtype 1 12.4 /Instance
+/Objects 

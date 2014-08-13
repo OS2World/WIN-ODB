@@ -1,0 +1,45 @@
+Microsoft Visual Studio Solution File, Format Version 7.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "odbvssdebug", "odbvssdebug.vcproj", "{861E2ABC-4CA4-4499-BBC6-4E12E1365742}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "odblib", "..\odblib\odblib.vcproj", "{E2978D7D-94D1-412D-AC2E-F2438C8F0F54}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "odbmanagement", "..\odbmanagement\odbmanagement.vcproj", "{8DCC1D40-A706-4D5B-9BEC-BC9424650038}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "webbase", "..\webbase\webbase.vcproj", "{1F5071AB-40F8-498E-B40D-179C94F4D005}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "odbtransaction", "..\odbtransaction\odbtransaction.vcproj", "{24BD140D-D8D9-4277-B810-F3564437DE3D}"
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		ConfigName.0 = Debug
+		ConfigName.1 = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{861E2ABC-4CA4-4499-BBC6-4E12E1365742}.Debug.ActiveCfg = Debug|Win32
+		{861E2ABC-4CA4-4499-BBC6-4E12E1365742}.Debug.Build.0 = Debug|Win32
+		{861E2ABC-4CA4-4499-BBC6-4E12E1365742}.Release.ActiveCfg = Release|Win32
+		{861E2ABC-4CA4-4499-BBC6-4E12E1365742}.Release.Build.0 = Release|Win32
+		{E2978D7D-94D1-412D-AC2E-F2438C8F0F54}.Debug.ActiveCfg = Debug|Win32
+		{E2978D7D-94D1-412D-AC2E-F2438C8F0F54}.Debug.Build.0 = Debug|Win32
+		{E2978D7D-94D1-412D-AC2E-F2438C8F0F54}.Release.ActiveCfg = Release|Win32
+		{E2978D7D-94D1-412D-AC2E-F2438C8F0F54}.Release.Build.0 = Release|Win32
+		{8DCC1D40-A706-4D5B-9BEC-BC9424650038}.Debug.ActiveCfg = Debug|Win32
+		{8DCC1D40-A706-4D5B-9BEC-BC9424650038}.Debug.Build.0 = Debug|Win32
+		{8DCC1D40-A706-4D5B-9BEC-BC9424650038}.Release.ActiveCfg = Release|Win32
+		{8DCC1D40-A706-4D5B-9BEC-BC9424650038}.Release.Build.0 = Release|Win32
+		{1F5071AB-40F8-498E-B40D-179C94F4D005}.Debug.ActiveCfg = Debug|Win32
+		{1F5071AB-40F8-498E-B40D-179C94F4D005}.Debug.Build.0 = Debug|Win32
+		{1F5071AB-40F8-498E-B40D-179C94F4D005}.Release.ActiveCfg = Release|Win32
+		{1F5071AB-40F8-498E-B40D-179C94F4D005}.Release.Build.0 = Release|Win32
+		{24BD140D-D8D9-4277-B810-F3564437DE3D}.Debug.ActiveCfg = Debug|Win32
+		{24BD140D-D8D9-4277-B810-F3564437DE3D}.Debug.Build.0 = Debug|Win32
+		{24BD140D-D8D9-4277-B810-F3564437DE3D}.Release.ActiveCfg = Release|Win32
+		{24BD140D-D8D9-4277-B810-F3564437DE3D}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,6 @@
+NoName 10 3
+Type Usertypes Props /Props Index /Index
+Type kolle Subtype_of Usertypes Props appe 0 /Props Index /Index
+/Database Objects Type kolle Instance 2 /Instance
+/Objects Objects Type kolle Instance 2 appe 0 5 /Instance
+/Objects 

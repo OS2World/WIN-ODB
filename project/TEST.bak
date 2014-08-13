@@ -1,0 +1,15 @@
+#include <iostream.h>
+int main(int argc, char *argv[])
+{
+	int i=0;
+
+   cout<<argc<<" Arguments "<<endl;
+   while (i<argc)
+   {
+		cout<<argv[i]<<endl;
+      i++;
+   }
+   
+   return 1;
+
+}

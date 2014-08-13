@@ -1,0 +1,8 @@
+////////////////////////////////////////////////////////////////////////
+// comment
+//--------------------------
+create type person;//comment
+create type otto subtype of person; //
+create type kodd;
+
+set i=a/b;

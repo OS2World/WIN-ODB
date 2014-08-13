@@ -1,0 +1,18 @@
+#include "..\testappl\wingismenu.h"
+WINGISMENU MENU
+{
+	POPUP "&File"
+   {
+   	MENUITEM "&Open"        ,IDM_OPEN
+      MENUITEM "&Close"       ,IDM_CLOSE
+      MENUITEM "&Save"        ,IDM_SAVE
+      MENUITEM "&Exit WinGis" ,IDM_EXIT
+   }
+	POPUP "&Object"
+   {
+   	MENUITEM "&Point"       ,IDM_POINT
+      MENUITEM "&Line"        ,IDM_LINE
+      MENUITEM "&BoundedLine" ,IDM_BOUNDEDLINE
+      MENUITEM "&Area       " ,IDM_AREA
+   }
+}

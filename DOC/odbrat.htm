@@ -1,0 +1,141 @@
+<!----------------------------------------------------------------->
+<!-- FILE       : ODBRAT.DOC                                     -->
+<!-- DESCRIPTION: Part of ODB documentation package.             -->
+<!-- AUTHOR     : Staffan Flodin                                 -->
+<!----------------------------------------------------------------->
+<HTML>
+<TITLE> ODB Rationale </TITLE>
+<BODY> <body bgcolor="#ffffff" text="#000038" link="#0000ff" alink="#0000ff"
+vlink="#0000ff">
+<HR>
+<CENTER>
+<TABLE>
+<TR>
+	<TD><IMG SRC="ball.gif" ALT="Nice Small Pic" ALIGN = CENTER>
+	<TD><CENTER>
+		<FONT SIZE=+6>ODB for Win95/NT</FONT>
+		<BR>
+		<FONT SIZE=+2>An Object-Oriented Database V. 0.1</FONT><BR>
+		<I>Mail to: <A HREF="mailto:sflodin@ozemail.com.au">ODB for Win 95 / NT</A></I>
+	   </CENTER>
+	<TD><IMG SRC="tri.gif" ALT="Nice Small Pic" ALIGN = CENTER>
+</TABLE>
+<HR>
+<H1>Why Use ODB</H1>
+</CENTER>
+
+<TABLE> <TABLE BORDER = 2 TABLE BGCOLOR="#efffa4">
+<TR>
+	<TD><B>ODB Feature
+	<TD><B>Benefit from using OFB
+	<TD><B>Advantage to other technologies
+
+<TR>
+
+	<TD><B>Object Oriented Data Model
+	<TD>Supports OO modelling of data which means that complex
+	data can be modelled using the powerful tools that OO provides
+	<TD>The relational model, e.g., MS SQL Server, Oracle...
+	databases do not offer a true OO database.
+	Hence, any of these products will not prform well with
+	complex data (i.e., a number of n-n relations with a substantial
+	number of data items
+<TR>
+	<TD><B>Main Memory Database
+	<TD>All data in main memory. As main memory is becomming increasingly 
+	cheaper main memory databases are becomming a reality. Benchmarking of ODB has shown that 
+	even on an 8 Mb machine running OS/2 50000 objects of average
+	size is posible. ODB is optimized towards main memory utilisation
+	where a vast number of measusers has been taken to optimise 
+	the main memory utilisation of ODB
+	<TD>Standard databases, e.g., MS SQL Server, Oracle etc...
+	are diskbased where data is cached in and out of main memory
+	hence, a main memory database will outperform any diskbased
+	database for any type of operation
+
+<TR>
+	<TD><B>Light Weight
+	<TD>In std databases logging and locking is a central part
+	of the database. In <B>ODB</B> these features may be disabeled for
+	greater performance. With loggin and locking disabeled
+	<B>ODB</B> is a <I>light weight</I> database engine. Some
+	of the application <B>ODB</B> is tailored towards will benefit
+	from using <B>ODB</B> in <I>light weight</I> mode, See
+	<I>ODB Applications</I>
+	<TD>MS SQL Server, or Oracle cannot be run in light weight mode.
+	Other OO databases eg., ObjectStore can tailor their locking
+	granule etc., to get database behaviour tailored towards
+	the application 
+<TR>
+	<TD><B>Data Independece
+	<TD>The model of the data is independet of your application model.
+	Hence, Your application (C++,VB, java program) do not need to be touched
+	if you change the way the data is modelled.
+	<TD>Using standard OO databases like ObjectStore the datamodel of you r
+	application is closely linked to your data model since your
+	data model is pre processed into C++ and comiled, linked 
+	with your application.
+<TR>
+	<TD><B>Application Address Space
+	<TD>Your application runs in the same address space as <B>ODB</B>, hence 
+	the <B>ODB</B> objects (your data) is directly accessible 
+	in your application without any data conversions or other
+	tideous and resource consuming operations
+	<TD>Using MS SQL Server or any other relation database server
+	the problem of <I>Impedance Mismatch</I>, i.e., discrepancies 
+	is supported data types, is a major problem that causes 
+	significant overhead at runtime. <B>ODB</B> has completely
+	eliminated this overhead without sacrificing data independence
+
+<TR>
+	<TD> <B>Stand Alone or Client - Server
+	<TD> You can use <B>ODB</B> as the stand alone data manager for your
+	client or in a Client - Server setup. In both cases the processing
+	is done at the client, in the client server setup all updates
+	need to be commited to the server.
+	<TD>MS SQL Server or any other traditional RDBMS do not provide this 
+	flexibility, also they adhere to the outdated client server
+	model where the server must be a high end machine since it does all
+	the processing. Using <B>ODB</B> the load is distributed 
+	over the network instaed of concentrated to the server.
+
+<TR>
+	<TD>Use <B>ODB</B> in light weight mode at client as data
+	manager
+	<TD><B>Increased Productivity
+	<TD>Using MFC's or STL in application development a lot of
+	effort will be put in to develop the data management at the
+	client. Using <B>ODB</B> as the data manager at the client
+	this effort is substantially reduced, hence your project will be
+	both more robust and also faster through the development phase 
+
+<TR>
+	<TD>The <B>ODB</B> data file is selfcontained and be shared 
+	between and correlated
+	<B>ODB</B> sites
+	<TD><B>Information Sharing and cross database correlation</B>
+	<TD><B>ODB</B> kernels can open any number of databases and
+	correlate the data between the databases. Using MS SQL server
+	or other similar products sharing data and data models are not
+	simple.
+</TABLE>
+
+<HR>
+<CENTER>
+
+<BR>
+<TABLE>
+<TR>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+	<TD> <CENTER>
+		<FONT SIZE=-2>ODB for Win95 / NT</FONT>
+		<FONT SIZE=-3>An Object-Oriented Database V. 0.1<BR>
+		<I>Mail to<A HREF="mailto:sflodin@ozemail.com.au">
+		ODB for Win 95 / NT</A></I></CENTER>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+</TABLE>
+</CENTER>
+<HR>
+
+</BODY>
+</HTML>

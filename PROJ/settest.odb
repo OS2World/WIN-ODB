@@ -1,0 +1,7 @@
+Odb_Version_0.1_Database_file ODB_Database 10 3
+Type Usertypes Props /Props Index /Index
+Type type1 Subtype_of Usertypes Props setp 6 /Props Index /Index
+/Database Objects Type type1 Instance 2 /Instance
+/Objects Objects Type type1 Instance 2 setp 6 0 { 1 }
+/Instance
+/Objects 

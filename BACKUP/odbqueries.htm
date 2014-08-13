@@ -1,0 +1,323 @@
+<!----------------------------------------------------------------->
+<!-- FILE       : ODBQUERIES.HTM                                 -->
+<!-- DESCRIPTION: Part of ODB documentation package.             -->
+<!-- AUTHOR     : Staffan Flodin                                 -->
+<!----------------------------------------------------------------->
+<HTML>
+<TITLE> ODB Users Guide Schema creation</TITLE>
+<BODY> <body bgcolor="#ffffff" text="#000038" link="#002080" alink="#0000ff"
+vlink="#001050">
+<CENTER>
+<PRE>
+<a href = "odbdoc.htm"><IMG SRC="tab1b.gif" BORDER=0></a><a href = "odbintro.htm"><IMG SRC="tab2b.gif" BORDER=0></a><a href = "odbschema.htm"><IMG SRC="tab3b.gif" BORDER=0></a><a href = "odbqueries.htm"><IMG SRC="tab4w.gif" BORDER=0></a><a href = "odbmisc.htm"><IMG SRC="tab5b.gif" BORDER=0></a><a href = "odbexample.htm"><IMG SRC="tab6b.gif" BORDER=0></a>
+</PRE>
+<BR>
+
+
+<TABLE>
+<TR>
+	<TD><IMG SRC="ball.gif" ALT="A small blue ball" ALIGN = CENTER>
+	<TD><CENTER>
+		<FONT SIZE=+6>ODB for Win95/NT</FONT>
+		<BR>
+		<FONT SIZE=+2>An Object-Oriented Database V. 0.1</FONT><BR>
+		<I>Mail to: <A HREF="mailto:sflodin@ozemail.com.au">ODB for Win 95 / NT</A></I>
+	   </CENTER>
+	<TD><IMG SRC="tri.gif" ALT="A pyramid suspended in mid air!!" ALIGN = CENTER>
+</TABLE>
+
+
+
+</CENTER>
+<HR>
+
+
+<A NAME="5.0"><H2>5.0	  The query interface</H2></A>
+<P>
+The query interface is a <I>stream based</I> query interface. In a stream based
+query interface the application opens a stream from which objects can be
+retrieved one by one until no more objects are returned. Thus, no materialization
+ of the entire set of object that may constitute the result of some query occurs.
+The basic operations on streams are:
+<UL>
+<LI>Open
+<LI>Get
+<LI>Reset
+<LI>Close
+</UL>
+Streams may be opened over any type or over another existing stream. Streams
+have a state which means that it depends on the previous operations what the
+result of the <I>get</I> operation will be. As a consequence of this streams
+may be opened and objects retrieved one by one at arbitrary occasions, the
+stream will hold its state and return the next object upon request.
+</P>
+<P>
+Open streams may be <I>reset</I> which means that their state is changed to some
+ initial state. In order to redo a query this is a useful feature that saves the
+	application from having to open and combine some new streams to redo the same
+	query.
+</P>
+<P>
+Streams which will not be used any more may be <I>closed</I>. Closing a streams
+means it cannot be reused and any reference to any stream which is closed must
+not be reused.
+</P>
+<P>
+There are three different types of streams:
+<UL>
+<LI>Query stream
+<LI>Select stream
+<LI>Semi-join stream
+</UL>
+Query streams are opened over types to select all or those object which comply
+with some condition that can be defined when opening the stream.
+</P>
+<P>
+Select streams are opened over another stream to select only those objects that
+satisfy a condition that is defined with the select stream.
+</P>
+<P>
+Semi-join streams are opened over two other streams. The semi join stream
+returns those object from the left operand stream for which there exists an
+object in the right operand stream that satisfy some condition defined over
+the two streams.
+</P>
+
+<A NAME="5.1"><H2>5.1	  Opening streams</H2></A>
+<P>
+Streams are opened by sending a message to the database object. The return value
+ is either a reference to the new stream or NULL if the operation was successful
+	or failed, respectively. In this section <I>stream handles</I> and <I>open
+	stream  statements</I> are explained.
+</P>
+
+<A NAME="5.1.1"><H3>5.1.1	  Stream handles</H3></A>
+<P>
+There are three C++ types that may be used to declare stream handles. A handle,
+<I>q_strm</I>, to a query_stream is declared as:
+<PRE>
+ODB_QSTREAM q_strm;
+</PRE>
+A declaration of a select stream, <I>s_strm</I>, handle is:
+<PRE>
+ODB_SSTREAM s_strm;
+</PRE>
+And for a semi-join stream the handle, <I>sj_strm</I>, is declared as:
+<PRE>
+ODB_SJSTREAM sj_strm;
+</PRE>
+</P>
+
+<A NAME="5.1.2"><H3>5.1.2	  Opening a query stream</H3></A>
+<P>
+Query streams are opened over some type. This means that the stream accesses the
+ objects that are instances of the type, the type extent, and the instances of
+ its subtypes.
+</P>
+<CENTER>
+<A NAME="FIGURE4">
+<IMG SRC="fig4.gif" ALT="Stream opening"><BR>
+Figure 4. Opening streams</A>
+</CENTER>
+<P> 
+For example, in this figure, if a query stream is opened over the type named
+Person then all objects of type person and of the type named Employee will be
+considered as possible objects to output.
+</P>
+<P>
+A query stream can be opened over a type named Employee as:
+<PRE>
+My_DB.open_stream("Employee");
+</PRE>
+This stream will retrieve every object in the extent of type Employee and in the
+ extent of all subtypes to the type named Employee, called the
+ <I>deep extent</I> of type Employee.
+</P>
+<P>
+A stream can be opened which only retrieves object that satisfy some condition
+defined with the stream. Assume we want to retrieve all persons aged 18, i.e. all
+ objects in the deep extent of the type named Person that have the value 18 for
+ its age property. This is done as:
+<PRE>
+My_DB.open_stream("Person","Age", "=",(ODB_INT)18);
+</PRE>
+In this statement we used the =-operator to compare the values of the objects
+with the value defined with the stream. For integer and real there are additional
+ comparison operators that can be used. These are:
+<UL>
+<LI>=
+<LI>&lt
+<LI>&lt =
+<LI>>
+<LI>>=
+<LI>!=
+</UL>
+For object reference, charstring and collection valued properties only equality
+ is meaningful thus when opening streams with condition on such properties the
+ operator can be excluded.
+</P>
+<P>
+For collections the equality operator is <I>overloaded</I>. If one operand is a
+collection and the other is a non collection type then the equality means the
+<I>member</I> operator. If on the other hand both operands are sets then the
+equality operator means that the same members should be found in both sets,
+i.e. A=B means that if an object, o, is member of set A then o must also be a
+member of the set B and vice verca.
+</P>
+<P>
+To exemplify how streams are opened over character strings, collections and
+object reference valued properties consider this example:
+</P>
+<P>
+A stream is to be opened over the Employee type where all Employees which have
+the name "Bob Smith" should be returned from the stream. This is written as:
+<PRE>
+My_DB.open_stream("Employee","Name","Bob Smith");
+</PRE>
+Streams with restrictions over collections and object reference valued
+properties are opened analogously.
+</P>
+
+<A NAME="5.1.3"><H3>5.1.3	  Opening a select stream</H3></A>
+<P>
+Select streams are opened over existing streams to add additional conditions
+on the objects that are sought.
+If for example, all Person objects with age greater than 18 and whose name is
+"John Doe" are interesting we write:
+<PRE>
+ODB_QSTREAM s1;
+ODB_SSTREAM s2;
+//Open s1
+s1=My_DB.open_stream("Person","Age","&gt =",(ODB_INT)18);
+</PRE>
+
+Now, <I>s1</I> retrieves all objects of type Person with age greater than or
+equal to 18. The additional name condition can be added by opening a
+select_stream over this stream as:
+<PRE>
+s2=My_DB.select(s1,"Name","John Doe");
+</PRE>
+
+Here, a stream is opened over the existing stream, s1, and a condition on the
+name attribute is defined and the result is bound to the stream variable s2.
+The objects are retrieved from s2 by the <A HREF="#5.2"><I>get</I>-method</A>.
+</P>
+
+<A NAME="5.1.4"><H3>5.1.4	  Open a semi join stream</H3></A>
+<P>
+The semi-join operation is a variant of the traditional join operator in the
+relational algebra.
+The semi-join stream is opened over two streams where attribute values from
+objects in one stream are compared with attribute values of the objects from the other stream. Only objects from one stream is in the result of the stream. The latter is the difference from a traditional join operator where the result is a tuple of values, (<I>See any textbook that covers the relational algebra and relational databases</I>).
+</P>
+<P>
+To exemplify, assume we have two types, Pet and Person where both have a
+character string valued <I>name</I>-attribute. If we would like to retrieve
+those persons that has the same name as a pet has we write:
+<PRE>
+ODB_QSTREAM qst1,qst2;
+ODB_SJSTREAM sjs;
+
+//Open qst1 over persons and
+//qst2 over pets
+qst1=My_DB.open_stream("Person");
+qst2=My_DB.open_stream("Pet");
+
+//Open the semi join stream
+sjs=My_DB.semi_join(qst1,"Name",qst2,"Name");
+</PRE>
+The objects returned will be from the stream qst1 that has the same
+<I>name</I>-value as any object of type pet.
+</P>
+
+<A NAME="5.2"><H2>5.2	  Retrieving objects from streams</H2></A>
+<P>
+Given an open stream, objects can be retrieved through that stream by sending
+the <I>get</I> message to the database object with the stream as additional
+argument with the message. The result is either an object or NULL depending
+on the success of the operation.
+</P>
+<P>
+The following example opens a stream and retrieves all objects that satisfies
+the condition that their value for the age property must be greater then 65.
+<PRE>
+ODB_QSTREAM qst;
+ODB_REF obj;
+
+//Open the stream
+qst=My_DB.open_stream("Person","Age" ,"&gt =",65);
+if (qst==NULL) {
+	//Do some error recovery
+	//qst may be the NULL reference if 
+	//the open statement failed
+	}
+else {
+	//Get the first object and 
+	//then the rest of the objects
+	obj=My_DB.get(qst);
+	while(obj!=NULL){
+		//do something with obj
+		obj=My_DB.get(qst);
+		}
+} //end else
+</PRE>
+
+This example shows the standard way of iterating through a stream. When all
+objects are retrieved (a NULL reference is returned) the stream can either be
+closed or reset to its initial state.
+</P>
+
+<A NAME="5.3"><H2>5.3	  Stream reset</H2></A>
+<P>
+When an opened stream has reached its end or if we by some other reason do not
+want to retrieve any more objects from it the stream can be reset. When a
+stream is reset it is set to the same state as if it was just opened.
+</P>
+<P>
+Streams that will be used again to query the data should be reset instead of
+closed and recreated.
+A stream is reset by sending the <I>reset_stream</I> message to the database
+object as:
+<PRE>
+My_DB.reset_stream(qst);
+</PRE>
+Where qst is an object of type query, select or semi join stream.
+</P>
+
+<A NAME="5.4"><H2>5.4	  Stream close</H2></A>
+<P>
+Streams are closed when it is no longer to be reused again. For composite
+streams, closing the outer most stream will cause all streams it uses to be
+closed as well. In <A HREF="#FIGURE4">Figure4</A> this means that closing the
+stream <I>s2</I> will also close the stream <I>s1</I>. In the same figure,
+closing <I>s1</I> only will leave <I>s2</I> in an undefined state.
+Streams are closed by sending the <I>close_stream</I> message to the database
+object as:
+<PRE>
+ODB_QSTREAM qst;
+// Open qst, and use it
+My_DB.close_stream(qst);
+</PRE>
+After a stream has been closed th application must not try to use the reference
+unless the reference is assigned another stream.
+</P>
+
+
+<HR>
+<CENTER>
+<BR>
+<TABLE>
+<TR>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+	<TD> <CENTER>
+		<FONT SIZE=-2>ODB for Win95 / NT</FONT>
+		<FONT SIZE=-3>An Object-Oriented Database V. 0.1<BR>
+		<I>Mail to<A HREF="mailto:sflodin@ozemail.com.au">
+		ODB for Win 95 / NT</A></I></CENTER>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+</TABLE>
+</CENTER>
+<HR>
+
+</BODY>
+</HTML>

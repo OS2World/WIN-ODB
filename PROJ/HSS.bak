@@ -1,0 +1,7 @@
+Odb_Version_0.1_Database_file HSS 1000 4
+Type Usertypes Props /Props Index /Index
+Type SensorData Subtype_of Usertypes Props TimeStamp 1 /Props
+Type DoLog Subtype_of SensorData Props SpeedOGround 1 /Props 
+/Database Objects Type SensorData Type DoLog Instance 3 /Instance
+/Objects Objects Type SensorData Type DoLog Instance 3 SpeedOGround 1 12.4 TimeStamp 1 3.44457e+07 /Instance
+/Objects 

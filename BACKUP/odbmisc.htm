@@ -1,0 +1,548 @@
+<!----------------------------------------------------------------->
+<!-- FILE       : ODBMISC.HTM                                    -->
+<!-- DESCRIPTION: Part of ODB documentation package.             -->
+<!-- AUTHOR     : Staffan Flodin                                 -->
+<!----------------------------------------------------------------->
+<HTML>
+<TITLE> ODB Users Guide Misc</TITLE>
+<BODY> <body bgcolor="#ffffff" text="#000038" link="#002080" alink="#0000ff"
+vlink="#001050">
+<CENTER>
+<pre>
+<a href = "odbdoc.htm"><IMG SRC="tab1b.gif" BORDER=0></a><a href = "odbintro.htm"><IMG SRC="tab2b.gif" BORDER=0></a><a href = "odbschema.htm"><IMG SRC="tab3b.gif" BORDER=0></a><a href = "odbqueries.htm"><IMG SRC="tab4b.gif" BORDER=0></a><a href = "odbmisc.htm"><IMG SRC="tab5w.gif" BORDER=0></a><a href = "odbexample.htm"><IMG SRC="tab6b.gif" BORDER=0></a>
+</pre>
+<BR>
+
+
+<TABLE>
+<TR>
+	<TD><IMG SRC="ball.gif" ALT="A blue sphere" ALIGN = CENTER>
+	<TD><CENTER>
+		<FONT SIZE=+6>ODB for Win95/NT</FONT>
+		<BR>
+		<FONT SIZE=+2>An Object-Oriented Database V. 0.1</FONT><BR>
+		<I>Mail to: <A HREF="mailto:sflodin@ozemail.com.au">ODB for Win 95 / NT</A></I>
+	   </CENTER>
+	<TD><IMG SRC="tri.gif" ALT="A pink geometric shape" ALIGN = CENTER>
+</TABLE>
+
+
+</CENTER>
+<HR>
+
+
+<A NAME="6.0"><H1>6.0	  Collections</H1></A>
+<P>
+The datatype <I>collection</I> is somewhat more complex than the other datatypes
+ supported by <B>ODB</B>. A collection is similar to a set with the difference
+ that a collection can contain several equal objects or values.
+</P>
+
+<A NAME="6.1"><H2>6.1	  Creating collections</H2></A>
+<P>
+Collections are created by sending the <I>create_collection </I>message to the
+database object. On successful creation a handle to an empty collection is
+returned. This handle must <B>ALWAYS</B> be assigned a reference owned by the
+application since the collection otherwise will be unaccessible to the
+application. The application owned reference can be released when the collection
+ is referenced from elswhere, e.g. through an attribute of some object.
+</P>
+<P>
+A collection which may contain references to other objects is created and
+assigned a collection handle <I>ch</I> as:
+<PRE>
+ODB_SET ch;
+ch=My_DB.create_collection(_OBJECT_);
+</PRE>
+
+Valid type identifiers are to the create_collection method are:
+<UL>
+<LI>_INT_
+<LI>_REAL_
+<LI>_CHARSTRING_
+<LI>_OBJECT_
+</UL>
+Thus, it is not possible to declare a collection to contain other collections. 
+</P>
+
+<A NAME="6.2"><H2>6.2	  Adding elements to a collection</H2></A>
+<P>
+When a collection has been created elements may be inserted into the collection.
+<B>ODB</B> supports two way of doing this; by sending the <I>collection_insert</I>
+message to the database object or by sending the <I>insert</I> message directly
+to the collection object.
+</P>
+<P>
+In the following example a collection of character strings are created and bound
+ to the handle <I>coll</I>. Then two elements are inserted into the set by
+ <I>collection_insert</I> and by <I>insert</I>.
+<PRE>
+ODB_SET coll;
+
+//Create a collection 
+coll=My_DB.create_collection(_CHAR_);
+My_DB.collection_insert(coll,"Object");
+coll->insert("Orientation");
+</PRE>
+
+The difference with these two ways is that by sending the collection_insert
+ message to the database objects all necessary checks are performed before
+ insertion. When the insert message is sent to a collection the application
+ must ensure that the collection is of the correct type and that the collection
+	handle is initialized properly.
+</P>
+<P>
+The return value from collection_insert is:
+<UL>
+<LI> &gt 0 upon succesful insert
+<LI>== -1 for improper handle
+<LI>==-2 if the collection was of another type than the element to insert
+</UL>
+</P>
+
+<A NAME="6.3"><H2>6.3	  Delete element from collection</H2></A>
+<P>
+Elements may be deleted from a collection by either sending the
+<I>delete_element</I> message to the set object or by sending the
+<I>delete_from_collection</I> message to the database object. In the following
+example objects are deleted from the set coll.
+<PRE>
+ODB_SET coll;
+
+//Create collection
+coll=My_DB.create_collection(_INT_);
+
+//Insert into collection using both
+//insertion methods
+My_DB.collection_insert(coll,2);
+coll->insert(3);
+
+//remove from collection
+My_DB.delete_from_collection(coll,3);
+coll->delete(2);
+</PRE>
+
+Using the <I>delete_from_collection</I> message to the database object is a
+safer way since all necessary checks are performed before deketion of any
+element. However, sending the <I>delete</I> message directly to the collection
+object is slightly faster but then the application must ensure that the handle
+is initialized etc.
+</P>
+<P>
+Note especially that before using the <I>delete</I> message directly to the
+collection object to delete an ODB_CHAR the characterstring must be substituted
+ with the characterstring stored in the string table. The same is true for
+ inserting characterstrings directly into a collection The following example
+ illustrates the correct procedure:
+<PRE>
+ODB_REF cstr, cstr2;
+ODB_SET coll;
+coll=My_DB.create_collection(_CHAR_);
+
+//Get a handle to the stored ODB string
+//Don't bother if you know it does not
+//exist, ODB takes all reqd actions
+cstr=My_DB.getstring("ODB");
+
+//Insert it into the collection
+My_DB.collection_insert(coll,cstr);
+
+//The following will not delete 
+//ODB from the collection
+coll.delete("ODB");
+
+//The following will delete 
+// "ODB" from the collection
+cstr2=My_DB.getstring("ODB");
+coll.delete(cstr2);
+</PRE>
+</P>
+
+<A NAME="6.4"><H2>6.4	  Delete collection</H2></A>
+<P>
+Collections are deleted by either sending the <I>delete_collection</I> message
+to the database object or the <I>delete_set</I> message to the collection object.
+</P>
+
+<A NAME="7.0"><H1>7.0	  Datatypes</H1></A>
+<P>
+There are a number of <B>ODB</B> specific datatypes and type identifiers that
+are used to interface <B>ODB</B> in the API.
+</P>
+
+<A NAME="7.1"><H2>7.1	  C++ Datatypes</H2></A>
+<P>
+There are a number of C++ datatypes and classes defined in the API these are:
+<CENTER>
+<TABLE BORDER=1>
+<TH> C++ datatype <TH> Type of data
+<TR><TD>ODB_INT<TD>integer
+<TR><TD>ODB_REAL<TD>real
+<TR><TD>ODB_OID<TD>oid
+<TR><TD>ODB_CHAR<TD>charstring
+<TR><TD>ODB_REF<TD>object handle
+<TR><TD>ODB_SET<TD>collection handle
+<TR><TD>ODB_QSTREAM<TD>query stream handle
+<TR><TD>ODB_SSTREAM<TD>select stream handle
+<TR><TD>ODB_SJSTREAM<TD>semi-join stream handle
+<TR><TD>ODB_DB<TD>database object
+<TR><TD>ODB_DB_HANDLE<TD>odb database handle
+<TR><TD>ODB_TYPE<TD>odb type handle
+</TABLE>
+</CENTER>
+</P>
+<P>
+These types are used by the application using <B>ODB</B> to declare interface
+variables to <B>ODB</B>.
+
+The C++ classes the API provides are:
+<CENTER>
+<TABLE BORDER=1>
+<TH>C++ Class<TH>Ref. decl<TH>Description
+<TR><TD>Database<TD>ODB_DB<TD>The ODB database class
+<TR><TD>Type<TD>ODB_TYPE(ref.)<TD>The ODB type class
+<TR><TD>Object<TD>ODB_REF (ref.)<TD>The ODB object class
+<TR><TD>Outputbuffer<TD>N/A<TD>The ODB outputbuffer class
+</TABLE></CENTER>
+</P>
+
+<A NAME="7.2"><H2>7.2	  Type identifiers</H2></A>
+<P>
+There are a number of type identifiers defined in the API which are used to
+specify to <B>ODB</B> which type to consider. These are:
+<UL>
+<LI>_INT_
+<LI>_REAL_
+<LI>_CHAR_
+<LI>_OBJECT_ 
+<LI>_OBJECT_COLLECTION_  
+<LI>_INT_COLLECTION_ 
+<LI>_REAL_COLLECTION_ 
+<LI>_CHAR_COLLECTION_  
+</UL>
+These identifiers are used to identify objects of C++ datatypes as :
+<CENTER>
+<TABLE BORDER=1>
+<TH> Type Id
+<TH>C++ Type
+<TR>	<TD>_INT_
+	<TD>ODB_INT
+<TR>	<TD>_REAL_
+	<TD>ODB_REAL
+<TR>	<TD>_CHAR_
+	<TD>ODB_CHAR
+<TR>	<TD>_OBJECT_
+	<TD>ODB_REF
+<TR>	<TD>_OBJECT_COLLECTION_
+	<TD>ODB_SET
+<TR>	<TD>_INT_COLLECTION_
+	<TD>ODB_SET
+<TR>	<TD>_REAL_COLLECTION_
+	<TD>ODB_SET
+<TR>	<TD>_CHAR_COLLECTION_
+	<TD>ODB_SET
+</TABLE>
+Table1. Type and Id mapping
+</CENTER>
+</P>
+<P>
+Note that the C++ datatype  ODB_SET is used to denote all collection types.
+The type identifiers are used to denote the result type of properties when these
+ are created and to denote which type of elements a collection can contain.
+</P>
+
+<A NAME="8.0"><H1>8.0	  More interface methods</H1></A>
+<P>
+In addition to database creation, maintenance and querying there a methods to
+print objects, retrieve object and types etc. these are described here.
+</P>
+
+<A NAME="8.1"><H2>8.1	  The string table</H2></A>
+<P>
+Each database object contains a stringtable where all strings used by the datbase
+ are stored. Before some operatons involving strings can be executed the
+ application must get a handle to the string maintained by the database otherwise
+	equality tests etc. will not function properly. In most cases <B>ODB</B> does
+	this for you.
+</P>
+<P> 
+A string handle to a prticular string is obtained by sending the <I>getstring</I>
+ message to the database object. In the following example a handle is obtained
+ to the string "ODB Rules".
+<PRE>
+ODB_CHAR str;
+str=My_DB.getstring("ODB Rules");
+</PRE>
+The following example demonstrates the benefit if the string table:
+<PRE>
+ODB_CHAR s1, s2;
+s1=My_DB.getstring("ODB");
+s2=My_DB.getstring("ODB");
+if (s1==s2) cout &lt&lt "\nODB Rules\n";
+else cout &lt&lt "\nYou cheated\n");
+</PRE>
+The output will of course be: ODB Rules 
+</P>
+
+<A NAME="8.2"><H2>8.2	  Printing <B>ODB</B> objects</H2></A>
+<P>
+All objects, types and databases may be printed by sending the <I>display</I>
+message to the object.
+To support any print-method the application may want to utilize all display
+methods of all <B>ODB</B> objects print in a buffer which is provided by the
+<B>ODB</B>API.
+</P>
+<P>
+The <I>display</I> message can be sent to any <B>OBD</B> object with a
+<I>display buffer</I> as argument as:
+<PRE>
+displaybuffer buf;
+database odb;
+ODB_TYPE tp;
+
+//Create a type
+tp=odb.create_type("Person");
+
+//print type to buffer
+tp->display(buf);
+
+//print buffer to stdout
+cout &lt&lt buf.get_buffer();
+
+//reset buffer before used
+buf.reset_buffer();
+</PRE>
+</P>
+
+<A NAME="8.2.1"><H3>8.2.1	  Display buffer</H3></A>
+<P>
+OBD provides a class named <I>outputbuffer</I> which all display methods use.
+A buffer, Disp_Buf is declared in the application as:
+<PRE>
+outputbuffer DispBuf;
+</PRE>
+The buffer can be retrieved by sending the get_buffer message as:
+<PRE>
+Disp_Buf.getbuffer();
+</PRE>
+The return value is a reference to a character buffer as:
+<PRE>
+ODB_CHAR BufPtr
+BufPtr=Disp_Buf.getbuffer();
+</PRE>
+The reference to the buffer can then be used by the application to print the
+content of the buffer on a widget in a GUI or on a tex display using cout etc.as
+ e.g.:
+<PRE>
+ODB_CHAR BufPtr
+BufPtr=Disp_Buf.getbuffer();
+cout &lt&lt BufPtr;
+</PRE>
+When the buffer has been printed or to prevent it from overflowing it can be
+emptied by sending the <I>reset_buffer</I> message to the buffer object as:
+<PRE>
+DispBuf.reset_buffer();
+</PRE>
+The buffer size is 1k and if there is not enough free space in it when used by
+some object, the display output from the object will be lost.
+</P>
+
+<A NAME="8.3"><H2>8.3	  Getting a type handle</H2></A>
+<P>
+If a handle is required to a type for e.g. printing the gettypenamed message to
+the database object as:
+<PRE>
+ODB_TYPE tp;
+tp=My_DB.gettypenemrd("Person");
+</PRE>
+In this example a handle is returned to the type named Person. If no such type
+exists the NULL handle is returned.
+</P>
+
+<A NAME="8.4"><H2>8.4	  Getting an object handle</H2></A>
+<P>
+Object handles can retreived by using the query interface, see
+<A HREF="#5.0">Section 5.0</A>, or by sending the <I>getobjectwithoid</I>
+message to the database object as:
+<PRE>
+ODB_REF o;
+
+o=My_DB.getobjectwithoid("Usertypes",45);
+</PRE>
+In this example the object with oid equal 45 is returned, if no such object exist
+a NULL handle is returned.
+Note especially that there is no guarantee that objects will get the same oid
+when reloaded from file, in fact it is very likely that it will get another oid.
+</P>
+
+<A NAME="8.5"><H2>8.5	  Traversing all subtypes of a type</H2></A>
+<P>
+If the application for some reason wants to traverse the type tree of the
+database the application then first sends the <I>getallsubtypes</I> message to
+the database object to get the first subtype. All subsequent subtypes are
+retreived one by one by sending the <I>getnextsubtype</I> message to the database
+object. The following exaple shows how all types in the database are printed
+on stdout:
+<PRE>
+ODB_CHAR tp; //type names
+ODB_TYPE tph; //type handle
+database My_DB;
+
+My_DB.load_database("Compdb.odb");
+tp=My_DB.getallsubtypes();
+while(tp!=NULL){
+	cout &lt&lt tp &lt&lt `\n';
+	tp=My_DB.getnextsubtype();
+	//Type handles to the subtypes
+	//can be obtained as
+	tph=My_DB.gettypenamed(tp);
+}
+</PRE>
+</P>
+
+<A NAME="8.6"><H2>8.6	  Traversing direct subtypes of a type</H2></A>
+A <I>direct subtype</I> of a type, <I>t</I>, is a type whose supertype is the
+type <I>t</I>. The direct subtypes are traversed by first sending the
+<I>getsubtypes</I> message to the database object and then sending the
+<I>getsubtype</I> message to get the other subtype names, one by one as:
+<PRE>
+char *tp; //type names
+ODB_TYPE tph; //type handle
+database My_DB;
+
+My_DB.load_database("Compdb.odb");
+tp=My_DB.getsubtypes("Person");
+while(tp!=NULL){
+	cout &lt&lt tp &lt&lt `\n';
+	tp=My_DB.getsubtype("Person");
+	//Type handles to the subtypes
+	//can be obtained as
+	tph=My_DB.gettypenamed(tp);
+}
+</PRE>
+
+In this example all direct subtypes of the type named Person are retreived.
+</P>
+
+<A NAME="8.7"><H2>8.7	  Getting the supertype to a type</H2></A>
+<P>
+The supertype name of a particular type can be retreived by using the
+<I>getsupertype</I> message to the database object.
+</P>
+<P> 
+In this example the supertypename of the type named Employee is retreived and
+then used to get a handle to the supertype to the type named Employee.
+<PRE>
+ODB_CHAR stpnm;
+ODB_TYPE stp;
+stpnm=My_DB.getsupertype("Employee");
+stp=My_DB.gettypenamed(stpnm);
+</PRE>
+</P>
+
+<A NAME="8.8"><H2>8.8	  Getting all properties of a type</H2></A>
+<P>
+The names of all properties of a type can be retreived b y first sending the
+<I>getfirstprop</I> messageto the database object and then get the rest of the
+property names by sending the <I>getnextprop</I> message to the database object.
+</P>
+<P>
+In this example all properties of the type named Employee are printed to stdout.
+<PRE>
+ODB_CHAR pn; //prop names
+database My_DB;
+
+My_DB.load_database("Compdb.odb");
+pn=My_DB.getfirstprop("Employee");
+while(pn!=NULL){
+	cout &lt&lt pn &lt&lt `\n';
+	pn=My_DB.getnextprop("Employee");
+}
+</PRE>
+</P>
+
+<A NAME="8.9"><H2>8.9	  Getting the type of a property</H2></A>
+<P>
+As described in <A HREF="#4.3">Section 4.3</A> all properties are associated
+with a type where the type describes which objects the property can have as
+values.
+</P>
+<P>
+The type of a property can be retreived by sending the <I>getpropertytype</I>
+message to the database object. The returned value is a type identifier
+<A HREF="#4.3"> see section 4.3</A>.
+In the following example the type identifier is retreived from the name
+property of the Person type.
+<PRE>
+ODB_TYPE_TAG ttg;
+ttg=My_DB.getpropertytype("Person","Name");
+</PRE>
+</P>
+
+<A NAME="8.10"><H2>8.10	  Getting the value of an object  property</H2></A>
+<P>
+Each property denotes a value or other object. To retreive the denoted value or
+object the application sends the <I>getproperty_value</I> message to the database
+object.
+</P>
+<P>
+It is important to note that the return value is a code indicating the success
+ of the operation. The value is retreived by sending the reference to the variable
+	the result is intendet to be retreived into. In the next example the value of a
+	set valued property is retreived into the variable <I>coll</I>:
+<PRE>
+ODB_SET coll;
+ODB_REF obj;
+
+//obj is assigned a person object
+//and person have a collection 
+//valued property named Parents 
+//defined to them.
+
+ok=My_DB.getproperty_value(obj,"Parents",&coll);
+</PRE>
+The return value is:
+<UL>
+<LI>&gt 0 if the operation succeeded
+<LI>==-1 if the object reference was NULL
+<LI>==-2 if the property did not exist
+<LI>==-3 if the expected result type did not match the resulttype of the property.
+</UL>
+</P>
+<A NAME="9.0">
+<H1>Conclusion</H1></A>
+<P>
+This system is intended to support developers in managing moderately sized data
+in an easy manner. The data can be
+created and changed outside the application by using a graphical user interface
+and later loaded into
+the application easily without any recompilation or other cumbersome procedure.
+</P>
+<P>
+The system supports the object-oriented data modelling paradigm for the data stored.
+ The data can easily be queried
+through a high level stream based interface which the API provides.<BR><BR>
+This is the firs released version of the system and any bug reports or comments
+ are welcomned to <A HREF="mailto:sflodin@ozemail.com.au"> me</A>.<BR><BR>
+</P>
+
+
+<HR>
+<CENTER>
+<BR>
+<TABLE>
+<TR>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+	<TD> <CENTER>
+		<FONT SIZE=-2>ODB for Win95 / NT</FONT>
+		<FONT SIZE=-3>An Object-Oriented Database V. 0.1<BR>
+		<I>Mail to<A HREF="mailto:sflodin@ozemail.com.au">
+		ODB for Win 95 / NT</A></I></CENTER>
+	<TD><A HREF = "odbdoc.htm"><IMG SRC="odbsmall.jpg" ALT="Nice Small Pic" ALIGN = CENTER></A>
+</TABLE>
+</CENTER>
+<HR>
+
+
+</BODY>
+</HTML>

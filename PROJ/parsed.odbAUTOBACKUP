@@ -1,0 +1,15 @@
+Odb_Version_0.1_Database_file NoName 10 6
+Type Usertypes Props /Props Index /Index
+Type person Subtype_of Usertypes Props name 3 money 0 /Props Index /Index
+Type otto Subtype_of person Props /Props Index /Index
+Type kodd Subtype_of person Props friend 4 salary 0 /Props Index /Index
+Type volatile Props timeToLive 0 /Props Index /Index
+/Database Objects Type person Instance 4 /Instance
+Type otto Type kodd Instance 5 /Instance
+/Objects Objects Type person Instance 4 name 3 
+kodde
+money 0 125 /Instance
+Type otto Type kodd Instance 5 friend 4  4 salary 0 0 name 3 
+koddeleffe
+money 0 0 /Instance
+/Objects 

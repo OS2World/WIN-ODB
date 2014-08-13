@@ -1,0 +1,1722 @@
+<HTML>
+<TITLE> ODB Users Guide </TITLE>
+<BODY> <body bgcolor="#ffffff" text="#000038" link="#002080" alink="#0000ff"
+vlink="#001050">
+<CENTER>
+<HR>
+<IMG SRC="odb.jpg" ALT="Nice Pic">
+<BR>
+<FONT SIZE=+6>ODB for OS/2 WARP and Windows 95</FONT>
+<BR>
+<FONT SIZE=+2>An Object-Oriented Database V. 0.2</FONT><BR>
+<I>by</I><BR>
+Staffan Flodin<BR>
+<I><A HREF="mailto:sflodin@ozemail.com.au">
+sflodin@ozemail.com.au</A></I>
+</CENTER>
+<HR>
+<H1>Table of contents</H1>
+<TABLE>
+<TR><TD>1.0<TD><A HREF="#1.0">Introduction</A>
+<TR><TD>2.0<TD><A HREF="#2.0">ODB system</A>
+<TR><TD>2.1<TD><A HREF="#2.1">Using ODB for Warp</A>
+<TR><TD>2.2<TD><A HREF="#2.2">Files</A>
+<TR><TD>2.3<TD><A HREF="#2.3">System Requirements</A>
+<TR><TD>3.0<TD><A HREF="#3.0">System overview of ODB</A>
+<TR><TD>4.0<TD><A HREF="#4.0">The C++ API</A>
+<TR><TD>4.1<TD><A HREF="#4.1">Database operations</A>
+<TR><TD>4.1.1<TD><A HREF="#4.1.1">Database creation</A>
+<TR><TD>4.1.2<TD><A HREF="#4.1.2">Type creation</A>
+<TR><TD>4.1.3<TD><A HREF="#4.1.3">Property Creation</A>
+<TR><TD>4.1.4<TD><A HREF="#4.1.4">Object creation</A>
+<TR><TD>4.1.5<TD><A HREF="#4.1.5">Object modification</A>
+<TR><TD>4.1.6<TD><A HREF="#4.1.6">Index creation</A>
+<TR><TD>4.1.7<TD><A HREF="#4.1.7">Type deletion</A>
+<TR><TD>4.1.8<TD><A HREF="#4.1.8">Property deletion</A>
+<TR><TD>4.1.9<TD><A HREF="#4.1.9">Delete Object</A>
+<TR><TD>4.1.10<TD><A HREF="#4.1.10">Delete index</A>
+<TR><TD>4.2<TD><A HREF="#4.2">The query interface</A>
+<TR><TD>4.2.1<TD><A HREF="#4.2.1">Opening streams</A>
+<TR><TD>4.2.1.1<TD><A HREF="#4.2.1.1">Stream handles</A>
+<TR><TD>4.2.1.2<TD><A HREF="#4.2.1.2">Opening a query stream</A>
+<TR><TD>4.2.1.3<TD><A HREF="#4.2.1.3">Opening a select stream</A>
+<TR><TD>4.2.1.4<TD><A HREF="#4.2.1.4">Open a semi join stream</A>
+<TR><TD>4.2.2<TD><A HREF="#4.2.2">Retrieving objects from streams</A>
+<TR><TD>4.2.3<TD><A HREF="#4.2.3">Stream reset</A>
+<TR><TD>4.2.4<TD><A HREF="#4.2.4">Stream close</A>
+<TR><TD>4.3<TD><A HREF="#4.3">Collections</A>
+<TR><TD>4.3.1<TD><A HREF="#4.3.1">Creating collections</A>
+<TR><TD>4.3.2<TD><A HREF="#4.3.2">Adding elements to a collection</A>
+<TR><TD>4.3.3<TD><A HREF="#4.3.3">Delete element from collection</A>
+<TR><TD>4.3.4<TD><A HREF="#4.3.4">Delete collection</A>
+<TR><TD>4.4<TD><A HREF="#4.4">Datatypes</A>
+<TR><TD>4.4.1<TD><A HREF="#4.4.1">C++ Datatypes</A>
+<TR><TD>4.4.2<TD><A HREF="#4.4.2">Type identifiers</A>
+<TR><TD>4.5<TD><A HREF="#4.5">More interface methods</A>
+<TR><TD>4.5.1<TD><A HREF="#4.5.1">The string table</A>
+<TR><TD>4.5.2<TD><A HREF="#4.5.2">Printing ODB objects</A>
+<TR><TD>4.5.2.1<TD><A HREF="#4.5.2.1">Display buffer</A>
+<TR><TD>4.5.3<TD><A HREF="#4.5.3">Getting a type handle</A>
+<TR><TD>4.5.4<TD><A HREF="#4.5.4">Getting an object handle</A>
+<TR><TD>4.5.5<TD><A HREF="#4.5.5">Traversing all subtypes of a type</A>
+<TR><TD>4.5.6<TD><A HREF="#4.5.6">Traversing direct subtypes of a type</A>
+<TR><TD>4.5.7<TD><A HREF="#4.5.7">Getting the supertype to a type</A>
+<TR><TD>4.5.8<TD><A HREF="#4.5.8">Getting all properties of a type</A>
+<TR><TD>4.5.9<TD><A HREF="#4.5.9">Getting the type of a property</A>
+<TR><TD>4.5.10<TD><A HREF="#4.5.10">Getting the value of an object  property</A>
+<TR><TD>5.0<TD><A HREF="#5.0">The ODBQL Interface</A>
+<TR><TD> <TD><A HREF="#Sample">Sample application code</A>
+
+</TABLE>
+<HR>
+
+
+<A NAME="1.0">
+<H1>1.0	  Introduction</H1></A>
+
+The purpose of this system is to provide system developers an easy to use
+database facility with powerful query capabilities. <B>ODB</B>
+(<I>ObjectDataBase</I>) consists of a graphical maintenance interface where
+databases may be defined and updated and a database engine.
+<BR>
+The database engine is accessed by applicaions through a simple and consistent
+<I>application programming interface</I>, API. <B>ODB</B> is a light-weight
+single- user main-memory object-oriented database.
+<BR>
+<B>ODB</B> Database schemas can be created and maintained either by using the
+graphical user interface or by using <I>ODBQL</I>, a data manipulation language
+(DML) defined for ODB.
+
+
+<UL>
+<LI><B>ODB</B> supports, subtyping, inheritance, complex 	objects and all
+objects have a unique identity
+	hence <B>ODB</B> is object-oriented.</LI>
+<LI> It always keeps the data in main memory, thus it is 	primarily intended
+for applications with
+	moderately sized data requirements. It uses secondary 	storage only for
+	storing the
+	database between sessions.</LI>
+<LI>It is light-weight because some of the traditional database 	facilities
+such as locking and logging
+	does not exist in <B>ODB</B>. The reason is that it is 	intended to be used
+	as a fast and easy to
+	use storage and search module in any application 	where traditionally the
+	application developer
+	 programmed the data storage, e.g. as sequential file 	scans etc.</LI>
+<LI>It differs from other C++ based object-oriented databases
+	in that it is dynamic in nature. Hence your application
+	is linked and compiled once and the database schema
+	is created or changed dynamically without any 
+	recompilation of the application.
+<LI> It has an easy to use and understand data manipulation language
+	<I>ODBQL</I></LI>
+</UL>
+
+<A NAME="2.0">
+<H1>2.0	  <B>ODB</B> system</H1></A>
+
+The <B>ODB</B>-system consists of two parts: A graphical user interface for
+creation and maintenance of the database and a C++ API for accessing the
+database engine from another application.
+<BR>
+<CENTER>
+<IMG SRC="fig1.gif" ALT="System Overview">
+<BR>
+Figure 1. System Overview
+<BR>
+</CENTER>
+
+The graphical user interface faciliates creation, update and deletion of types,
+properties and objects in an easy manner. The interface also supports loading,
+saving and creation of <B>ODB</B>-databases.
+<BR>
+The C++ API gives any application access to a set of high-level easy to use
+interface methods to the database engine. The API gives the application access to the same functionality which is available in the user interface. In addition, the API also provides a powerful <I>stream based query interface</I> to the database.
+
+<A NAME="2.1">
+<H2>2.1	  Using <B>ODB</B> for Warp</H2></A>
+
+The on-line version of <B>ODB</B> contains all functionality of the system,
+i.e. it is not a special shareware version. If you use <B>ODB</B> and find it
+useful the cost is US$99. Send an e-mail to <a href="mailto:sflodin@ozemail.com.au">sflodin@ozemail.com.au</a> for further
+details.
+
+<A NAME="2.2">
+<H2>2.2	  Files</H2></A>
+
+<B>ODB</B> consists of the following files:
+
+
+<UL>
+<LI>pmstore.exe The <B>ODB</B> creation and maintenance interface.</LI>
+<LI>demo.exe The demo.cpp executable</LI>
+<LI>ODB.h <B>ODB</B>  C++ header file.</LI>
+<LI>ODB.DLL <B>ODB</B> Dynamic link library </LI>
+<LI>ODB.lib The <B>ODB</B> staic library for Borland compilers.</LI>
+<LI>Compdb.odb Sample <B>ODB</B> database files.</LI>
+<LI>Demo.cpp Sample <B>ODB</B> application source code.</LI>
+<LI>demo.def Sample .def file for Borland compilers. </LI>
+<LI>odb.def A listing of all exported methods in the dll.<LI>
+</UL>
+
+
+<A NAME="2.3"><H2>2.3	  System Requirements</H2></A>
+
+The system is intended to run under OS/2 Warp Version 3 or higher. Any other
+requirements does not exist.
+
+<A NAME="3.0">
+<H1>3.0	  System overview of <B>ODB</B></H1></A>
+
+An <B>ODB</B>-database is a collection of <I>types</I> with <I>properties</I>
+and <I>objects</I> which are instances of types. <B>ODB</B>-types are instances
+of the system class <I>type</I> and <B>ODB</B>-objects are instances of the
+<I>object</I> system class <A HREF="#FIGURE2> see Figure 2</A>.
+<BR>
+<CENTER>
+<IMG SRC="fig2.gif" ALT="System Class Hierarchy">
+<BR>
+<A NAME="FIGURE2">
+Figure 2. System Class  hierarchy</A>
+<BR>
+</CENTER>
+
+The types are organized in a <I>subtype-supertype</I> hierarchy where subtypes
+<I>inherit</I> all properties defined or inherited to its supertype. In addition
+ to the inherited properties new properties can be created.
+A property is a name which <I>denotes values of objects</I>. Properties can
+denote values of the following <B>ODB</B>-database types:
+
+
+<UL>
+<LI>Integer
+<LI>Real
+<LI>Charstring
+<LI>Object reference
+<LI>Collection of Integer
+<LI>Collection of Real
+<LI>Collection of Charstring
+<LI>Collection of object reference.
+</UL>
+
+
+<B>ODB</B>-objects are instances of <B>ODB</B>-types where all properties
+defined or inherited to the type can be assigned values for the object.
+<BR>
+Objects can be retreived by their property values. And the <I>extent</I> of a
+type, i.e. the objects that belongs to a particular type and all subtypes to
+that type, can be queried through a stream based query interface. To facilitate
+fast look-up of objects <I>indexes</I> can be built over some or all of the
+properties of a type.
+<BR>
+The database can easily be updated or altered in the following ways:
+
+
+<UL>
+<LI>Type creation
+<LI>Property creation
+<LI>Object creation
+<LI>Index creation
+<LI>Type deletion
+<LI>Property deletion
+<LI>Object deletion
+<LI>Index deletion
+<LI>Object modification.
+</UL>
+
+
+<I>Integrity constraints</I> will be maintained by the system when types or
+objects are deleted or modified. All properties and indexes are inherited
+automatically to any newly created subtype of a particular type.
+
+<A NAME="4.0"><H1> The C++ API</H1>
+The C++ API is in the form of a dynamic link library (DLL) or a static link library (LIB).
+Different compilers hav different syntax for importing methods from DLLs. Also,
+different compilers have different name mangling protocols. Included in the ODB
+file set are two special files: demo.def and odb.def. odb.def lists all exported
+methods in the ODB.DLL library. demo.def is a Borland file that is to be used
+when demo.cpp is compiled to use ODB.DLL.<BR>
+
+<A NAME="4.1"><H2>4.1	  Database operations through the C++ API</H2></A>
+<P>
+In this section the <B>ODB</B>-database engine methods in the C++ API are described
+and exemplified. Throughout the examples a database object
+named <I>My_DB</I> is used to exemplify the <B>ODB</B>-API.
+</P>
+
+<A NAME="4.1.1"><H3>4.1.1	  Database creation</H3></A>
+<P>
+<CENTER>
+<IMG SRC="fig3.gif" ALT="The ODB Database Object">
+<BR>
+<A NAME="FIGURE3">
+Figure 3. The ODB-database object
+</A>
+<BR>
+</CENTER>
+
+The <B>ODB</B>-API contains a C++ class named <I>database</I> see
+<A HREF="#FIGURE3">Figure 3</A>. The database object in your application is a
+particular important object. It is through the database object which all
+accesses to the <B>ODB</B>-database and all calls to the database engine go.
+</P>
+<P>
+The database object contains the <I>database name,</I> an <B>ODB</B>-type named
+<I>Usertypes</I>, an object identifier (<I>OID</I>) generator and a <I>string
+table</I>.
+</P>
+<P>
+The name of the database object is assigned to it at creation or when the
+database is loaded from file.
+The type <I>Usertypes</I> is the root of the user defined type tree. This type
+can not be given user defined properties and objects can not be created from it.
+ Thus, if a type is created without a specified supertype the type named
+ Usertypes will become its supertype by default.
+</P>
+<P>
+The <I>string table</I> is a character string repository. All strings used in
+the database are stored in this table. This facilitates fast look-up of string
+valued properties. There are som cases where the application must access the
+string table but in most cases <B>ODB</B> handles this for the application.
+</P>
+<P>
+The OID generator generates OIDs for all new objects or types in the database.
+The OID can not be changed by the application and the application must never
+reference object by their OID's as the OIDs of the objects may change when the
+database is loaded again.
+</P>
+<P>
+If your application only needs one database this database is declared in your
+application as:
+<PRE>
+database My_DB("DBName");
+</PRE>
+
+This statement declares the object <I>My_DB</I> to be an <B>ODB</B>-database
+object with name <I>DBname</I>. All applications using <B>ODB</B> must have a
+database object. There is no limit set by <B>ODB</B>to the number of databases
+a single application can use.
+</P>
+<P>
+If several databases are required in the application these can be created
+dynamically by using the C++ new-operator as:
+
+<PRE>
+new database("OneMoreDB");
+</PRE>
+
+The database can be saved and restored from file as:
+<PRE>
+database My_DB;
+My_DB.load_database("Db1.odb");
+My.DB.save_database("Db1.odb");
+</PRE>
+In above statements the database object <I>My_DB</I> is first loaded and then
+saved with file name <I>Db1.odb</I>.
+</P>
+
+<A NAME="4.1.2"><H3>4.1.2	  Type creation</H3></A>
+<P>
+An <B>ODB</B>-type serve as a template for object creation. Properties and
+indexes are defined on types. A type can be declared as a subtype to any other
+type previously defined. If no supertype is declared then the new type will
+become subtype to the type named <I>Usertypes</I> in the database object.
+<B>ODB</B>-types are instances of the system type named type,
+<A HREF="#FIGURE2">see Figure 2</A>.
+</P>
+<P> 
+An <B>ODB</B>-type inherits all properties defined to its supertype. Any indexes
+ defined to the supertype will also be defined to the new type. Types are
+ created by the <B>ODB</B>-database object as:
+<PRE>
+My_DB.create_type("Person");
+My_DB.create_type("Employee","Person");
+</PRE>
+Here a type named <I>Person</I> is first created. A supertype has not been
+specified thus the type named Person will be a subtype of the type
+<I>Usertypes</I> in the database object <I>My_DB</I>. In the next example a type
+ named <I>Employee</I> is created as a subtype to the type named Person.
+</P>
+<P>
+If several databases are active in some application there may be types eith
+identical names in the different databases. Since references to types go through
+ the database object there is never any ambiguity when referencing types by
+ their names.
+</P>
+<P> 
+The return value from the <I>create_type</I>-statement is a reference to the new
+ type or the NULL-reference if the type creation failed. The following example
+ declares a type reference that can be bound to the return value from the
+ create_type statement:
+<PRE>
+ODB_TYPE My_NewType;
+My_NewType=My_DB.create_type("Person");
+</PRE>
+The return value need to be assigned a reference. The type is inserted in the
+type hierarchy of the database and can be referenced by its name whenever
+required.
+</P>
+
+<A NAME="4.1.3"><H3>4.1.3	  Property Creation</H3></A>
+<P>
+Properties are defined to types and for the objects of that type the properties
+can be given values. Properties are typed where the following types together
+with their identifiers are supported:
+<CENTER>
+<TABLE BORDER=1>
+<TH>Type <TH>Type tag
+<TR><TD>Integer<TD>_INT_
+<TR><TD>Real<TD>_REAL_
+<TR><TD>Charstring<TD>_CHAR_
+<TR><TD>Object reference<TD>_OBJECT_
+<TR><TD>Collection of Integer<TD>_INT_COLLECTION_
+<TR><TD>Collection of Real<TD> _REAL_COLLECTION_
+<TR><TD>Collection of Charstring <TD>_CHAR_COLLECTION_
+<TR><TD>Collection of object reference.<TD> _OBJECT_COLLECTION_
+</TABLE>
+</CENTER>
+</P>
+<P>
+To create an integer valued property named salary to the type named employee in
+the database <I>My_DB</I> we write:
+<PRE>
+My_DB.add_property("Employee","Salary",_INT_);
+</PRE>
+Analogously, an object valued property named Boss is created as:
+<PRE>
+My_DB.add_property("Employee","Boss",_OBJECT_);
+</PRE>
+The return value is either less than or greater than zero if the operation
+failed or succeeded, respectively.
+</P>
+<P>
+The <I>add_property</I>-statement can be executed any time and all subtypes to
+the target type that may exist will also be given the property. All instances to
+ the types which has been given a new property will also be given the property.
+ The value however will be undefined and it is up to the application that the
+ value is not referenced prior to being assigned a value.
+<P>
+
+<A NAME="4.1.4"><H3>4.1.4	  Object creation</H3></A>
+<P>
+Objects are created as instances to a particular type. When objects are created
+these are given all the properties defined to the type. The values of the
+properties are undefined and must be assigned values prior to being referenced.
+</P>
+<P>
+To create an instances of the type named Person in the database <I>My_DB</I>
+we write:
+<PRE>
+My_DB.create_instance("Person");
+</PRE>
+The return value is a reference to the newly created object or the NULL
+reference. To declare a variable which can be assigned the result of the
+create_instance operation we write:
+<PRE>
+ODB_REF My_NewObj;
+My_NewObj=My_DB.create_instance("Person");
+</PRE>
+The return value may be discarded but then there is a problem in referencing the
+object at a later stage. Perhaps the best procedure is to create an object and
+keep a reference to it. This reference can then be used when the properties of
+the objects are assigned values. When values are assigned to its properties the
+reference may be discarded and the object can at a later stage be referenced
+through its attribute values. This is easily done through the <A HREF="#4.2">
+query interface </A>described later in this manual.
+</P>
+
+<A NAME="4.1.5"><H3>4.1.5	  Object modification</H3></A>
+<P>
+Object modification means changing the values of its properties. This is done by
+ using sending the message <I>set_propertyvalue</I> to the database object as:
+<PRE>
+My_DB.setproperty_value(My_NewObj,"Salary",(ODB_INT)53200);
+</PRE>
+Where <I>My_NewObj</I> is an <B>ODB</B>-object declared and created e.g as:
+<PRE>
+ODB_REF My_NewObj;
+My_NewObj=My_DB.create_instance("Employee");
+</PRE>
+The object is given the value 53200 for the property named Salary. Note that
+constants may require type casting for disambiguation purposes. In this example
+ the constant 53200 is casted to the type ODB_INT.
+The result from the database method <I>setproperty_value</I> is greater than or
+ less than zero if the operation was successful or failed, respectively.
+</P>
+<P>
+When property values are modified all indexes are automatically updated to
+consider the new value for the property.
+</P>
+
+<A NAME="4.1.6"><H3>4.1.6	  Index creation</H3></A>
+<P>
+To make retrievals through some property fast, indexes can be created. For
+example if a frequent search in the database is on a particular attribute e.g.
+Salary then an index should be created on that attribute to facilitate fast
+access to the objects with a particular value for the attribute named Salary.
+</P>
+<P>
+Indexes are created from the database object through the <I>create_index</I>
+method. The following example creates an index on the Salary property of the
+type Employee .
+<PRE>
+My_DB.create_index("Employee","Salary");
+</PRE>
+Note that if an index is created to some attribute of a particular type the
+index will also be created to that attribute in all subtypes. In above example
+any subtype to Employee will get an index on the salary property. It does not
+matter if the index is created before or after the subtypes are created. It does
+ not matter if instances to the types the index is created over has been
+ created. All existing instances will be entered into the index structures
+ automatically by <B>ODB</B>.
+</P>
+
+<A NAME="4.1.7"><H3>4.1.7	  Type deletion</H3></A>
+<p>
+Types can be deleted from the database dynamically. This is a particularly
+costly operation. When a type is deleted so are the subtypes to the type as
+well as all objects that are instances to the type or to any subtype of the
+type. Hence, A type deletion is a recursively applied down the type tree rooted
+at the specified type to delete.
+</P>
+<P>
+Types are deleted by the database object by sending the <I>delete_type</I>
+message. The result of the operation is either greater than or less than zero if
+ the operation was successful or failed, respectively.
+To delete the type Person from the database <I>My_DB</I> we write:
+<PRE>
+My_DB.delete_type("Person");
+</PRE>
+This will delete the type named Person, all instances of that type and then
+recursively delete all subtypes to the Person type. This operation can be costly
+ to perform when there are a lot of objects and types that has to be deleted and
+	their memory freed.
+</P>
+<P>
+Note especially that any references maintained by the application to types or
+objects which have been deleted must be reset by the application. Dereferncing
+such a reference is an undefined operation.
+</P>
+<A NAME="4.1.8"><H3>4.1.8	  Property deletion</H3></A>
+<P>
+Single properties can be deleted from types. When a property is deleted from
+some type it is deleted from all subtypes as well.
+</P>
+<P>
+When a property is deleted from a type the property is also deleted from all
+object that are instances to that type, i.e. the extent of the type.
+</P>
+<P>
+Properties are deleted from types by sending the <I>delete_property</I> message
+to the database object.
+To delete the property named Salary from the type named Employee in the database
+ <I>My_DB</I> we write:
+<PRE>
+My_DB.delete_propery("Employee","Salary");
+</PRE>
+Note that if the property that is to be deleted is inherited to the specified
+type that property can not be deleted as that would leave the database schema in
+ an inconsistent state. To properly delete a property it must be deleted from
+ the most general type it is defined for. (<I>A supertype is more general than
+ its subtypes</I>)
+</P>
+<P>
+This is because the object-oriented model states that any operation <I>op</I>
+applicable to a type <I>t</I> is also applicable to all subtypes of the type
+<I>t</I>. Hence, deleting an inherited property would violate this constraint.
+</P>
+
+<A NAME="4.1.9"><H3>4.1.9	  Delete Object</H3></A>
+<P>
+Objects may be deleted. When an object is deleted the system automatically
+deletes all references to that object from other objects in the database. Any
+references kept by the application to the deleted object must be reset by the
+application itself.
+</P>
+<P>
+Objects are deleted by sending the <I>delete_object</I> message to the database.
+ When deleting an object the database object must be provided a handle to the
+ object that are subject of deletion.
+</P>
+<P> 
+A handle can be obtained through the <A HREF="#4.2">query interface</A> or
+<A HREF="#4.5.4">other methods</A> that returns object handles.
+</P>
+<P>
+To exemplify, consider the following example where a handle <I>obj</I> is
+declared. This handle is then assigned an object through the
+<I>getobjectwithoid</I> method. This object is then deleted by the database
+object:
+<PRE>
+//Declare object handle,
+//database and an integer
+
+ODB_REF obj;
+database My_DB("ExDB");
+ODB_INT i=0;
+
+My_DB.create_type("Person");
+
+//Create 500 objects
+while(i++ &lt 500) My_DB.create_object("Person");
+
+//Assign an object to the handle, We can be 
+//quite certan there is an object with OID 415 now
+obj=My_DB.getobjectwithoid("Person", 415);
+
+//Delete the object
+//If there were no object with OID=415
+//then obj==NULL but that is all handeled
+//by ODB
+My_DB.delete_object(obj);
+</PRE>
+Any other object that reference the deleted object through some attribute will
+now have that attribute value set to NULL. Note that in this example the object
+handle <I>obj</I> is outside the control of <B>ODB</B> and must not be used by
+the application after the deletion. This is up to the application programmer
+to see to.
+</P>
+
+<A NAME="4.1.10"><H3>4.1.10	  Delete index</H3></A>
+<P>
+Indexes may be deleted by sending the <I>drop_index</I> message to the database
+object.
+In the following example the index over Salary for type Employee in database
+<I>My_DB</I> is deleted:
+<PRE>
+My_DB.drop_index("Employee","Salary");
+</PRE>
+The result is greater or less than zero if the operation was successful or
+failed respectively.
+</P>
+
+<A NAME="4.2"><H2>4.2	  The query interface</H2></A>
+<P>
+The query interface is a <I>stream based</I> query interface. In a stream based
+query interface the application opens a stream from which objects can be
+retrieved one by one until no more objects are returned. Thus, no materialization
+ of the entire set of object that may constitute the result of some query occurs.
+The basic operations on streams are:
+<UL>
+<LI>Open
+<LI>Get
+<LI>Reset
+<LI>Close
+</UL>
+Streams may be opened over any type or over another existing stream. Streams
+have a state which means that it depends on the previous operations what the
+result of the <I>get</I> operation will be. As a consequence of this streams
+may be opened and objects retrieved one by one at arbitrary occasions, the
+stream will hold its state and return the next object upon request.
+</P>
+<P>
+Open streams may be <I>reset</I> which means that their state is changed to some
+ initial state. In order to redo a query this is a useful feature that saves the
+	application from having to open and combine some new streams to redo the same
+	query.
+</P>
+<P>
+Streams which will not be used any more may be <I>closed</I>. Closing a streams
+means it cannot be reused and any reference to any stream which is closed must
+not be reused.
+</P>
+<P>
+There are three different types of streams:
+<UL>
+<LI>Query stream
+<LI>Select stream
+<LI>Semi-join stream
+</UL>
+Query streams are opened over types to select all or those object which comply
+with some condition that can be defined when opening the stream.
+</P>
+<P>
+Select streams are opened over another stream to select only those objects that
+satisfy a condition that is defined with the select stream.
+</P>
+<P>
+Semi-join streams are opened over two other streams. The semi join stream
+returns those object from the left operand stream for which there exists an
+object in the right operand stream that satisfy some condition defined over
+the two streams.
+</P>
+
+<A NAME="4.2.1"><H3>4.2.1	  Opening streams</H3></A>
+<P>
+Streams are opened by sending a message to the database object. The return value
+ is either a reference to the new stream or NULL if the operation was successful
+	or failed, respectively. In this section <I>stream handles</I> and <I>open
+	stream  statements</I> are explained.
+</P>
+
+<A NAME="4.2.1.1"><H4>4.2.1.1	  Stream handles</H4></A>
+<P>
+There are three C++ types that may be used to declare stream handles. A handle,
+<I>q_strm</I>, to a query_stream is declared as:
+<PRE>
+ODB_QSTREAM q_strm;
+</PRE>
+A declaration of a select stream, <I>s_strm</I>, handle is:
+<PRE>
+ODB_SSTREAM s_strm;
+</PRE>
+And for a semi-join stream the handle, <I>sj_strm</I>, is declared as:
+<PRE>
+ODB_SJSTREAM sj_strm;
+</PRE>
+</P>
+
+<A NAME="4.2.1.2"><H4>4.2.1.2	  Opening a query stream</H4></A>
+<P>
+Query streams are opened over some type. This means that the stream accesses the
+ objects that are instances of the type, the type extent, and the instances of
+ its subtypes.
+</P>
+<CENTER>
+<A NAME="FIGURE4">
+<IMG SRC="fig4.gif" ALT="Stream opening"><BR>
+Figure 4. Opening streams</A>
+</CENTER>
+<P> 
+For example, in this figure, if a query stream is opened over the type named
+Person then all objects of type person and of the type named Employee will be
+considered as possible objects to output.
+</P>
+<P>
+A query stream can be opened over a type named Employee as:
+<PRE>
+My_DB.open_stream("Employee");
+</PRE>
+This stream will retrieve every object in the extent of type Employee and in the
+ extent of all subtypes to the type named Employee, called the
+ <I>deep extent</I> of type Employee.
+</P>
+<P>
+A stream can be opened which only retrieves object that satisfy some condition
+defined with the stream. Assume we want to retrieve all persons aged 18, i.e. all
+ objects in the deep extent of the type named Person that have the value 18 for
+ its age property. This is done as:
+<PRE>
+My_DB.open_stream("Person","Age", "=",(ODB_INT)18);
+</PRE>
+In this statement we used the =-operator to compare the values of the objects
+with the value defined with the stream. For integer and real there are additional
+ comparison operators that can be used. These are:
+<UL>
+<LI>=
+<LI>&lt
+<LI>&lt =
+<LI>>
+<LI>>=
+<LI>!=
+</UL>
+For object reference, charstring and collection valued properties only equality
+ is meaningful thus when opening streams with condition on such properties the
+ operator can be excluded.
+</P>
+<P>
+For collections the equality operator is <I>overloaded</I>. If one operand is a
+collection and the other is a non collection type then the equality means the
+<I>member</I> operator. If on the other hand both operands are sets then the
+equality operator means that the same members should be found in both sets,
+i.e. A=B means that if an object, o, is member of set A then o must also be a
+member of the set B and vice verca.
+</P>
+<P>
+To exemplify how streams are opened over character strings, collections and
+object reference valued properties consider this example:
+</P>
+<P>
+A stream is to be opened over the Employee type where all Employees which have
+the name "Bob Smith" should be returned from the stream. This is written as:
+<PRE>
+My_DB.open_stream("Employee","Name","Bob Smith");
+</PRE>
+Streams with restrictions over collections and object reference valued
+properties are opened analogously.
+</P>
+
+<A NAME="4.2.1.3"><H4>4.2.1.3	  Opening a select stream</H4></A>
+<P>
+Select streams are opened over existing streams to add additional conditions
+on the objects that are sought.
+If for example, all Person objects with age greater than 18 and whose name is
+"John Doe" are interesting we write:
+<PRE>
+ODB_QSTREAM s1;
+ODB_SSTREAM s2;
+//Open s1
+s1=My_DB.open_stream("Person","Age","&gt =",(ODB_INT)18);
+</PRE>
+
+Now, <I>s1</I> retrieves all objects of type Person with age greater than or
+equal to 18. The additional name condition can be added by opening a
+select_stream over this stream as:
+<PRE>
+s2=My_DB.select(s1,"Name","John Doe");
+</PRE>
+
+Here, a stream is opened over the existing stream, s1, and a condition on the
+name attribute is defined and the result is bound to the stream variable s2.
+The objects are retrieved from s2 by the <A HREF="#4.2.2"><I>get</I>-method</A>.
+</P>
+
+<A NAME="4.2.1.4"><H4>4.2.1.4	  Open a semi join stream</H4></A>
+<P>
+The semi-join operation is a variant of the traditional join operator in the
+relational algebra.
+The semi-join stream is opened over two streams where attribute values from
+objects in one stream are compared with attribute values of the objects from the other stream. Only objects from one stream is in the result of the stream. The latter is the difference from a traditional join operator where the result is a tuple of values, (<I>See any textbook that covers the relational algebra and relational databases</I>).
+</P>
+<P>
+To exemplify, assume we have two types, Pet and Person where both have a
+character string valued <I>name</I>-attribute. If we would like to retrieve
+those persons that has the same name as a pet has we write:
+<PRE>
+ODB_QSTREAM qst1,qst2;
+ODB_SJSTREAM sjs;
+
+//Open qst1 over persons and
+//qst2 over pets
+qst1=My_DB.open_stream("Person");
+qst2=My_DB.open_stream("Pet");
+
+//Open the semi join stream
+sjs=My_DB.semi_join(qst1,"Name",qst2,"Name");
+</PRE>
+The objects returned will be from the stream qst1 that has the same
+<I>name</I>-value as any object of type pet.
+</P>
+
+<A NAME="4.2.2"><H3>4.2.2	  Retrieving objects from streams</H3></A>
+<P>
+Given an open stream, objects can be retrieved through that stream by sending
+the <I>get</I> message to the database object with the stream as additional
+argument with the message. The result is either an object or NULL depending
+on the success of the operation.
+</P>
+<P>
+The following example opens a stream and retrieves all objects that satisfies
+the condition that their value for the age property must be greater then 65.
+<PRE>
+ODB_QSTREAM qst;
+ODB_REF obj;
+
+//Open the stream
+qst=My_DB.open_stream("Person","Age" ,"&gt =",65);
+if (qst==NULL) {
+	//Do some error recovery
+	//qst may be the NULL reference if 
+	//the open statement failed
+	}
+else {
+	//Get the first object and 
+	//then the rest of the objects
+	obj=My_DB.get(qst);
+	while(obj!=NULL){
+		//do something with obj
+		obj=My_DB.get(qst);
+		}
+} //end else
+</PRE>
+
+This example shows the standard way of iterating through a stream. When all
+objects are retrieved (a NULL reference is returned) the stream can either be
+closed or reset to its initial state.
+</P>
+
+<A NAME="4.2.3"><H3>4.2.3	  Stream reset</H3></A>
+<P>
+When an opened stream has reached its end or if we by some other reason do not
+want to retrieve any more objects from it the stream can be reset. When a
+stream is reset it is set to the same state as if it was just opened.
+</P>
+<P>
+Streams that will be used again to query the data should be reset instead of
+closed and recreated.
+A stream is reset by sending the <I>reset_stream</I> message to the database
+object as:
+<PRE>
+My_DB.reset_stream(qst);
+</PRE>
+Where qst is an object of type query, select or semi join stream.
+</P>
+
+<A NAME="4.2.4"><H3>4.2.4	  Stream close</H3></A>
+<P>
+Streams are closed when it is no longer to be reused again. For composite
+streams, closing the outer most stream will cause all streams it uses to be
+closed as well. In <A HREF="#FIGURE4">Figure4</A> this means that closing the
+stream <I>s2</I> will also close the stream <I>s1</I>. In the same figure,
+closing <I>s1</I> only will leave <I>s2</I> in an undefined state.
+Streams are closed by sending the <I>close_stream</I> message to the database
+object as:
+<PRE>
+ODB_QSTREAM qst;
+// Open qst, and use it
+My_DB.close_stream(qst);
+</PRE>
+After a stream has been closed th application must not try to use the reference
+unless the reference is assigned another stream.
+</P>
+
+<A NAME="4.3"><H1>4.3	  Collections</H1></A>
+<P>
+The datatype <I>collection</I> is somewhat more complex than the other datatypes
+ supported by <B>ODB</B>. A collection is similar to a set with the difference
+ that a collection can contain several equal objects or values.
+</P>
+
+<A NAME="4.3.1"><H3>4.3.1	  Creating collections</H3></A>
+<P>
+Collections are created by sending the <I>create_collection </I>message to the
+database object. On successful creation a handle to an empty collection is
+returned. This handle must <B>ALWAYS</B> be assigned a reference owned by the
+application since the collection otherwise will be unaccessible to the
+application. The application owned reference can be released when the collection
+ is referenced from elswhere, e.g. through an attribute of some object.
+</P>
+<P>
+A collection which may contain references to other objects is created and
+assigned a collection handle <I>ch</I> as:
+<PRE>
+ODB_SET ch;
+ch=My_DB.create_collection(_OBJECT_);
+</PRE>
+
+Valid type identifiers are to the create_collection method are:
+<UL>
+<LI>_INT_
+<LI>_REAL_
+<LI>_CHARSTRING_
+<LI>_OBJECT_
+</UL>
+Thus, it is not possible to declare a collection to contain other collections. 
+</P>
+
+<A NAME="4.3.2"><H3>4.3.2	  Adding elements to a collection</H3></A>
+<P>
+When a collection has been created elements may be inserted into the collection.
+<B>ODB</B> supports two way of doing this; by sending the <I>collection_insert</I>
+message to the database object or by sending the <I>insert</I> message directly
+to the collection object.
+</P>
+<P>
+In the following example a collection of character strings are created and bound
+ to the handle <I>coll</I>. Then two elements are inserted into the set by
+ <I>collection_insert</I> and by <I>insert</I>.
+<PRE>
+ODB_SET coll;
+
+//Create a collection 
+coll=My_DB.create_collection(_CHAR_);
+My_DB.collection_insert(coll,"Object");
+coll->insert("Orientation");
+</PRE>
+
+The difference with these two ways is that by sending the collection_insert
+ message to the database objects all necessary checks are performed before
+ insertion. When the insert message is sent to a collection the application
+ must ensure that the collection is of the correct type and that the collection
+	handle is initialized properly.
+</P>
+<P>
+The return value from collection_insert is:
+<UL>
+<LI> &gt 0 upon succesful insert
+<LI>== -1 for improper handle
+<LI>==-2 if the collection was of another type than the element to insert
+</UL>
+</P>
+
+<A NAME="4.3.3"><H3>4.3.3	  Delete element from collection</H3></A>
+<P>
+Elements may be deleted from a collection by either sending the
+<I>delete_element</I> message to the set object or by sending the
+<I>delete_from_collection</I> message to the database object. In the following
+example objects are deleted from the set coll.
+<PRE>
+ODB_SET coll;
+
+//Create collection
+coll=My_DB.create_collection(_INT_);
+
+//Insert into collection using both
+//insertion methods
+My_DB.collection_insert(coll,2);
+coll->insert(3);
+
+//remove from collection
+My_DB.delete_from_collection(coll,3);
+coll->delete(2);
+</PRE>
+
+Using the <I>delete_from_collection</I> message to the database object is a
+safer way since all necessary checks are performed before deketion of any
+element. However, sending the <I>delete</I> message directly to the collection
+object is slightly faster but then the application must ensure that the handle
+is initialized etc.
+</P>
+<P>
+Note especially that before using the <I>delete</I> message directly to the
+collection object to delete an ODB_CHAR the characterstring must be substituted
+ with the characterstring stored in the string table. The same is true for
+ inserting characterstrings directly into a collection The following example
+ illustrates the correct procedure:
+<PRE>
+ODB_REF cstr, cstr2;
+ODB_SET coll;
+coll=My_DB.create_collection(_CHAR_);
+
+//Get a handle to the stored ODB string
+//Don't bother if you know it does not
+//exist, ODB takes all reqd actions
+cstr=My_DB.getstring("ODB");
+
+//Insert it into the collection
+My_DB.collection_insert(coll,cstr);
+
+//The following will not delete 
+//ODB from the collection
+coll.delete("ODB");
+
+//The following will delete 
+// "ODB" from the collection
+cstr2=My_DB.getstring("ODB");
+coll.delete(cstr2);
+</PRE>
+</P>
+
+<A NAME="4.3.4"><H3>4.3.4	  Delete collection</H3></A>
+<P>
+Collections are deleted by either sending the <I>delete_collection</I> message
+to the database object or the <I>delete_set</I> message to the collection object.
+</P>
+
+<A NAME="4.4"><H1>4.4	  Datatypes</H1></A>
+<P>
+There are a number of <B>ODB</B> specific datatypes and type identifiers that
+are used to interface <B>ODB</B> in the API.
+</P>
+
+<A NAME="4.4.1"><H3>4.4.1	  C++ Datatypes</H3></A>
+<P>
+There are a number of C++ datatypes and classes defined in the API these are:
+<CENTER>
+<TABLE BORDER=1>
+<TH> C++ datatype <TH> Type of data
+<TR><TD>ODB_INT<TD>integer
+<TR><TD>ODB_REAL<TD>real
+<TR><TD>ODB_OID<TD>oid
+<TR><TD>ODB_CHAR<TD>charstring
+<TR><TD>ODB_REF<TD>object handle
+<TR><TD>ODB_SET<TD>collection handle
+<TR><TD>ODB_QSTREAM<TD>query stream handle
+<TR><TD>ODB_SSTREAM<TD>select stream handle
+<TR><TD>ODB_SJSTREAM<TD>semi-join stream handle
+<TR><TD>ODB_DB<TD>database object
+<TR><TD>ODB_DB_HANDLE<TD>odb database handle
+<TR><TD>ODB_TYPE<TD>odb type handle
+</TABLE>
+</CENTER>
+</P>
+<P>
+These types are used by the application using <B>ODB</B> to declare interface
+variables to <B>ODB</B>.
+
+The C++ classes the API provides are:
+<CENTER>
+<TABLE BORDER=1>
+<TH>C++ Class<TH>Ref. decl<TH>Description
+<TR><TD>Database<TD>ODB_DB<TD>The ODB database class
+<TR><TD>Type<TD>ODB_TYPE(ref.)<TD>The ODB type class
+<TR><TD>Object<TD>ODB_REF (ref.)<TD>The ODB object class
+<TR><TD>Outputbuffer<TD>N/A<TD>The ODB outputbuffer class
+</TABLE></CENTER>
+</P>
+
+<A NAME="4.4.2"><H3>4.4.2	  Type identifiers</H3></A>
+<P>
+There are a number of type identifiers defined in the API which are used to
+specify to <B>ODB</B> which type to consider. These are:
+<UL>
+<LI>_INT_
+<LI>_REAL_
+<LI>_CHAR_
+<LI>_OBJECT_ 
+<LI>_OBJECT_COLLECTION_  
+<LI>_INT_COLLECTION_ 
+<LI>_REAL_COLLECTION_ 
+<LI>_CHAR_COLLECTION_  
+</UL>
+These identifiers are used to identify objects of C++ datatypes as :
+<CENTER>
+<TABLE BORDER=1>
+<TH> Type Id
+<TH>C++ Type
+<TR>	<TD>_INT_
+	<TD>ODB_INT
+<TR>	<TD>_REAL_
+	<TD>ODB_REAL
+<TR>	<TD>_CHAR_
+	<TD>ODB_CHAR
+<TR>	<TD>_OBJECT_
+	<TD>ODB_REF
+<TR>	<TD>_OBJECT_COLLECTION_
+	<TD>ODB_SET
+<TR>	<TD>_INT_COLLECTION_
+	<TD>ODB_SET
+<TR>	<TD>_REAL_COLLECTION_
+	<TD>ODB_SET
+<TR>	<TD>_CHAR_COLLECTION_
+	<TD>ODB_SET
+</TABLE>
+Table1. Type and Id mapping
+</CENTER>
+</P>
+<P>
+Note that the C++ datatype  ODB_SET is used to denote all collection types.
+The type identifiers are used to denote the result type of properties when these
+ are created and to denote which type of elements a collection can contain.
+</P>
+
+<A NAME="4.5"><H2>4.5	  More interface methods</H2></A>
+<P>
+In addition to database creation, maintenance and querying there a methods to
+print objects, retrieve object and types etc. these are described here.
+</P>
+
+<A NAME="4.5.1"><H3>4.5.1	  The string table</H3></A>
+<P>
+Each database object contains a stringtable where all strings used by the datbase
+ are stored. Before some operatons involving strings can be executed the
+ application must get a handle to the string maintained by the database otherwise
+	equality tests etc. will not function properly. In most cases <B>ODB</B> does
+	this for you.
+</P>
+<P> 
+A string handle to a prticular string is obtained by sending the <I>getstring</I>
+ message to the database object. In the following example a handle is obtained
+ to the string "ODB Rules".
+<PRE>
+ODB_CHAR str;
+str=My_DB.getstring("ODB Rules");
+</PRE>
+The following example demonstrates the benefit if the string table:
+<PRE>
+ODB_CHAR s1, s2;
+s1=My_DB.getstring("ODB");
+s2=My_DB.getstring("ODB");
+if (s1==s2) cout &lt&lt "\nODB Rules\n";
+else cout &lt&lt "\nYou cheated\n");
+</PRE>
+The output will of course be: ODB Rules 
+</P>
+
+<A NAME="4.5.2"><H3>4.5.2	  Printing <B>ODB</B> objects</H3></A>
+<P>
+All objects, types and databases may be printed by sending the <I>display</I>
+message to the object.
+To support any print-method the application may want to utilize all display
+methods of all <B>ODB</B> objects print in a buffer which is provided by the
+<B>ODB</B>API.
+</P>
+<P>
+The <I>display</I> message can be sent to any <B>OBD</B> object with a
+<I>display buffer</I> as argument as:
+<PRE>
+displaybuffer buf;
+database odb;
+ODB_TYPE tp;
+
+//Create a type
+tp=odb.create_type("Person");
+
+//print type to buffer
+tp->display(buf);
+
+//print buffer to stdout
+cout &lt&lt buf.get_buffer();
+
+//reset buffer before used
+buf.reset_buffer();
+</PRE>
+</P>
+
+<A NAME="4.5.2.1"><H4>4.5.2.1	  Display buffer</H4></A>
+<P>
+OBD provides a class named <I>outputbuffer</I> which all display methods use.
+A buffer, Disp_Buf is declared in the application as:
+<PRE>
+outputbuffer DispBuf;
+</PRE>
+The buffer can be retrieved by sending the get_buffer message as:
+<PRE>
+Disp_Buf.getbuffer();
+</PRE>
+The return value is a reference to a character buffer as:
+<PRE>
+ODB_CHAR BufPtr
+BufPtr=Disp_Buf.getbuffer();
+</PRE>
+The reference to the buffer can then be used by the application to print the
+content of the buffer on a widget in a GUI or on a tex display using cout etc.as
+ e.g.:
+<PRE>
+ODB_CHAR BufPtr
+BufPtr=Disp_Buf.getbuffer();
+cout &lt&lt BufPtr;
+</PRE>
+When the buffer has been printed or to prevent it from overflowing it can be
+emptied by sending the <I>reset_buffer</I> message to the buffer object as:
+<PRE>
+DispBuf.reset_buffer();
+</PRE>
+The buffer size is 1k and if there is not enough free space in it when used by
+some object, the display output from the object will be lost.
+</P>
+
+<A NAME="4.5.3"><H3>4.5.3	  Getting a type handle</H3></A>
+<P>
+If a handle is required to a type for e.g. printing the gettypenamed message to
+the database object as:
+<PRE>
+ODB_TYPE tp;
+tp=My_DB.gettypenemrd("Person");
+</PRE>
+In this example a handle is returned to the type named Person. If no such type
+exists the NULL handle is returned.
+</P>
+
+<A NAME="4.5.4"><H3>4.5.4	  Getting an object handle</H3></A>
+<P>
+Object handles can retreived by using the query interface, see
+<A HREF="#4.2">Section 4.2</A>, or by sending the <I>getobjectwithoid</I>
+message to the database object as:
+<PRE>
+ODB_REF o;
+
+o=My_DB.getobjectwithoid("Usertypes",45);
+</PRE>
+In this example the object with oid equal 45 is returned, if no such object exist
+a NULL handle is returned.
+Note especially that there is no guarantee that objects will get the same oid
+when reloaded from file, in fact it is very likely that it will get another oid.
+</P>
+
+<A NAME="4.5.5"><H3>4.5.5	  Traversing all subtypes of a type</H3></A>
+<P>
+If the application for some reason wants to traverse the type tree of the
+database the application then first sends the <I>getallsubtypes</I> message to
+the database object to get the first subtype. All subsequent subtypes are
+retreived one by one by sending the <I>getnextsubtype</I> message to the database
+object. The following exaple shows how all types in the database are printed
+on stdout:
+<PRE>
+ODB_CHAR tp; //type names
+ODB_TYPE tph; //type handle
+database My_DB;
+
+My_DB.load_database("Compdb.odb");
+tp=My_DB.getallsubtypes();
+while(tp!=NULL){
+	cout &lt&lt tp &lt&lt `\n';
+	tp=My_DB.getnextsubtype();
+	//Type handles to the subtypes
+	//can be obtained as
+	tph=My_DB.gettypenamed(tp);
+}
+</PRE>
+</P>
+
+<A NAME="4.5.6"><H3>4.5.6	  Traversing direct subtypes of a type</H3></A>
+A <I>direct subtype</I> of a type, <I>t</I>, is a type whose supertype is the
+type <I>t</I>. The direct subtypes are traversed by first sending the
+<I>getsubtypes</I> message to the database object and then sending the
+<I>getsubtype</I> message to get the other subtype names, one by one as:
+<PRE>
+char *tp; //type names
+ODB_TYPE tph; //type handle
+database My_DB;
+
+My_DB.load_database("Compdb.odb");
+tp=My_DB.getsubtypes("Person");
+while(tp!=NULL){
+	cout &lt&lt tp &lt&lt `\n';
+	tp=My_DB.getsubtype("Person");
+	//Type handles to the subtypes
+	//can be obtained as
+	tph=My_DB.gettypenamed(tp);
+}
+</PRE>
+
+In this example all direct subtypes of the type named Person are retreived.
+</P>
+
+<A NAME="4.5.7"><H3>4.5.7	  Getting the supertype to a type</H3></A>
+<P>
+The supertype name of a particular type can be retreived by using the
+<I>getsupertype</I> message to the database object.
+</P>
+<P> 
+In this example the supertypename of the type named Employee is retreived and
+then used to get a handle to the supertype to the type named Employee.
+<PRE>
+ODB_CHAR stpnm;
+ODB_TYPE stp;
+stpnm=My_DB.getsupertype("Employee");
+stp=My_DB.gettypenamed(stpnm);
+</PRE>
+</P>
+
+<A NAME="4.5.8"><H3>4.5.8	  Getting all properties of a type</H3></A>
+<P>
+The names of all properties of a type can be retreived b y first sending the
+<I>getfirstprop</I> messageto the database object and then get the rest of the
+property names by sending the <I>getnextprop</I> message to the database object.
+</P>
+<P>
+In this example all properties of the type named Employee are printed to stdout.
+<PRE>
+ODB_CHAR pn; //prop names
+database My_DB;
+
+My_DB.load_database("Compdb.odb");
+pn=My_DB.getfirstprop("Employee");
+while(pn!=NULL){
+	cout &lt&lt pn &lt&lt `\n';
+	pn=My_DB.getnextprop("Employee");
+}
+</PRE>
+</P>
+
+<A NAME="4.5.9"><H3>4.5.9	  Getting the type of a property</H3></A>
+<P>
+As described in <A HREF="#4.1.3">Section 4.1.3</A> all properties are associated
+with a type where the type describes which objects the property can have as
+values.
+</P>
+<P>
+The type of a property can be retreived by sending the <I>getpropertytype</I>
+message to the database object. The returned value is a type identifier
+<A HREF="#4.1.3"> see section 4.1.3</A>.
+In the following example the type identifier is retreived from the name
+property of the Person type.
+<PRE>
+ODB_TYPE_TAG ttg;
+ttg=My_DB.getpropertytype("Person","Name");
+</PRE>
+</P>
+
+<A NAME="4.5.10"><H3>4.5.10	  Getting the value of an object  property</H3></A>
+<P>
+Each property denotes a value or other object. To retreive the denoted value or
+object the application sends the <I>getproperty_value</I> message to the database
+object.
+</P>
+<P>
+It is important to note that the return value is a code indicating the success
+ of the operation. The value is retreived by sending the reference to the variable
+	the result is intendet to be retreived into. In the next example the value of a
+	set valued property is retreived into the variable <I>coll</I>:
+<PRE>
+ODB_SET coll;
+ODB_REF obj;
+
+//obj is assigned a person object
+//and person have a collection 
+//valued property named Parents 
+//defined to them.
+
+ok=My_DB.getproperty_value(obj,"Parents",&coll);
+</PRE>
+The return value is:
+<UL>
+<LI>&gt 0 if the operation succeeded
+<LI>==-1 if the object reference was NULL
+<LI>==-2 if the property did not exist
+<LI>==-3 if the expected result type did not match the resulttype of the property.
+</UL>
+</P>
+<A NAME="5.0"> <H1>5.0 The ODBQL Interface</H1></A>
+<A NAME="6.0">
+<H1>6.0 Conclusion</H1></A>
+<P>
+This system is intended to support developers in managing moderately sized data
+in an easy manner. The data can be
+created and changed outside the application by using a graphical user interface
+and later loaded into
+the application easily without any recompilation or other cumbersome procedure.
+</P>
+<P>
+The system supports the object-oriented data modelling paradigm for the data stored.
+ The data can easily be queried
+through a high level stream based interface which the API provides.<BR><BR>
+This is the firs released version of the system and any bug reports or comments
+ are welcomned to <A HREF="mailto:sflodin@ozemail.com.au"> me</A>.<BR><BR>
+</P>
+<A NAME="Sample">
+<H1>7.0 A Sample application</H1> </A>
+<P>
+To give an idea of how <B>ODB</B> is used the following example code illustrates
+the interface. This application file is included in the ftp package ODB.ZIP.
+</P>
+<A NAME="7.1">
+<H1>7.1 How to Make the demo</H1> </A>
+
+<HR>
+<PRE>
+
+#include &lt iostream.h&gt
+#include &lt fstream.h&gt
+#include &lt conio.h&gt
+#include &lt time.h&gt
+#include &lt math.h&gt
+#include &lt stdlib.h&gt
+#include &lt sys\timeb.h&gt
+#include "odb.h"
+
+outputbuffer obuf=outputbuffer();
+
+
+
+void browse_extent(ODB_TYPE tp,database db){
+//this function browses through all objects in the
+//extent of the specified type tp
+ODB_QSTREAM q_stream;
+ODB_CHAR tpname;
+ODB_REF o;
+
+	if (tp==NULL) return;    	//quit if shitty reference
+
+	tpname=tp-&gtgetname();   	//this method is not described
+					//in the manual, it is found
+					//in odb.h
+
+	q_stream=db.open_stream(tpname);
+
+	if (q_stream==NULL) return; 	//should not happen
+					//(they all say that)
+
+	cout&lt &lt "Browsing the extent of type "&lt &lt tpname&lt &lt '\n';
+	obuf.reset_buffer();		//reset the buffer
+
+	//follows is the standard structure of iterating through streams
+	//at ****** Any Code ***** application specific code are enterd
+	//in below example the object bound to o is just printed to stdout
+	//-------------------------------------------------
+	//----------- Std stream iteration-----------------
+	//-------------------------------------------------
+	//--          o=db.get(q_stream);                --
+	//--          while (o!=NULL){                   --
+	//--            ****** Any Code *****            --
+	//--            o=db.get(q_stream);              --
+	//--          }                                  --
+	//-------------------------------------------------
+	//----------- End Std stream iteration-------------
+	//-------------------------------------------------
+	o=db.get(q_stream);
+	while (o!=NULL){
+		o-&gtdisplay(obuf);
+		cout&lt &lt obuf.get_buffer()&lt &lt '\n';
+		obuf.reset_buffer();
+		o=db.get(q_stream);
+		}
+
+	//-------------------------------------------------
+	//--                I M P O R T A N T            --
+	//-------------------------------------------------
+	//-- The application MUST deallocate the stream  --
+	//-- here, otherwise a memory leak would occur as--
+	//-- the stream can not be referenced again      --
+	//-- Alternatively, declare it as STATIC         --
+	//-------------------------------------------------
+	db.close_stream(q_stream);
+	}
+
+
+void display_schema(database db){
+//For each type in the loaded database schema
+//display its information by sending the display message to the
+//type object and then for each type display its propperties
+ODB_CHAR tpname, propname;
+ODB_TYPE tphandle;
+
+	obuf.reset_buffer(); 	//empty any old crap in the buffer
+
+	tpname=db.getallsubtypes();		//get the first typename
+
+	while (tpname!=NULL){ 		//loop over all typenames
+
+		tphandle=db.gettypenamed(tpname); //given a type name the handle
+							//can be fetched
+		if (tphandle!=NULL) {
+			//display the type object and all its properties
+			tphandle-&gtdisplay(obuf);
+			cout&lt &lt "\n--------------------------------------\n";
+			cout&lt &lt obuf.get_buffer()&lt &lt '\n';
+			obuf.reset_buffer();
+			cout&lt &lt "\n------- Press any key for more -------\n" ;
+			getch();		//let the user control the flow
+		}; 				//end while
+
+	tpname=db.getnextsubtype();     //get next typename
+	} 				   //end while
+
+}					   //end function
+
+void select_type(database db){
+//In this function the user is provided all usertypes
+//in the database and then promted to select one whose
+//extent are to be browsed
+ODB_CHAR tpname;
+char usertpnm[20];
+ODB_TYPE utp;
+tpname=db.getallsubtypes();
+	while (tpname!=NULL){
+	cout&lt &lt tpname&lt &lt '\n';
+	tpname=db.getnextsubtype();
+	}
+	cout&lt &lt "Enter name of the type whose extent to browse\n";
+	cin&gt&gtusertpnm;
+	utp=db.gettypenamed(usertpnm);
+	if (utp==NULL) cout&lt &lt "\nThere no type named "&lt &lt usertpnm&lt &lt " in the database\n";
+	else browse_extent(utp,db);
+}
+
+void find_all_janitors(database My_DB){
+//In this function all janitors are retreived.
+//This is done by first finding the department
+//object with "Janitors" as value in to the
+//Name attribute
+ODB_QSTREAM q_stream;
+ODB_SSTREAM s_stream;
+ODB_REF o,jo;
+char typenm[16]="Department";
+char propnm[8]="Name";
+char val[16]="Janitors";
+
+	//Open a stream over the department type with the condition that
+	//the Name attribute must have Janitors as value
+	q_stream=My_DB.open_stream(typenm,propnm,val);
+
+	//The stream may not be opened if so it is best to check before use.
+	if (q_stream==NULL) {
+		cout&lt &lt "\nError when opening stream bla bla bla...\n";
+		return;
+		};
+
+	//The stream was opened allright. In the remaining we only consider the
+	//first found department named Janitors, thus we do not assume the name
+	//to be a key to departments
+
+	o=My_DB.get(q_stream);
+
+	//If o==NULL yhen there were no such department in the database
+	if (o==NULL) {
+		cout&lt &lt "No department named "&lt &lt val&lt &lt " exist in the database\n";
+		return;
+		}
+
+	//No longer req'd
+	My_DB.close_stream(q_stream);
+
+	//reuse q_stream to open the stream to select all employees at
+	//the department bound to object reference o
+
+	q_stream=My_DB.open_stream("Employee","EmployedAt",o);
+  if (q_stream==NULL) {
+		cout&lt &lt "\nError when opening stream over employee\n";
+		return;
+		};
+	cout&lt &lt "\nThese are the Janitors\n-------------------------\n";
+	obuf.reset_buffer();			//reset the buffer
+	//Now, we can start browsing the janitors
+	jo=My_DB.get(q_stream);
+	while (jo!=NULL){
+		jo-&gtdisplay(obuf);
+		cout&lt &lt obuf.get_buffer()&lt &lt '\n';
+		obuf.reset_buffer();
+		jo=My_DB.get(q_stream);
+		};
+
+	//Now, Lets select those janitors who earn more than 10000.
+	//This is accomplished by opening a select stream over the
+	//query stream which selects all janitors.
+
+	//First, reset the stream
+	My_DB.reset_stream(q_stream);
+	//secondly, open a select stream over q_stream with the
+	//condition that the salary should be greater than 10000
+	s_stream=My_DB.select(q_stream,"Salary","&gt",(ODB_INT)10000);
+
+	cout&lt &lt "\n Theese are all the rich janitors\n";
+	obuf.reset_buffer();			//reset the buffer
+	//Now, we can start browsing the rich janitors
+	jo=My_DB.get(s_stream);
+	while (jo!=NULL){
+		jo-&gtdisplay(obuf);
+		cout&lt &lt obuf.get_buffer()&lt &lt '\n';
+		obuf.reset_buffer();
+		jo=My_DB.get(s_stream);
+		};
+
+	My_DB.close_stream(s_stream);}
+
+ void demonstrate_index(database &My_DB){
+//In this fn a new type is created. The type is then
+//given an integer valued proerty which can be assigned
+//random values.
+//First create 5000 objects and find the ones with a particular
+//value for the attribute. Measure the time for this. Then create
+//an index and redo the search and measure time.
+struct timeb t1,t2;
+double elapsed_time;
+ODB_REF o;
+int i,v;
+ODB_QSTREAM q_stream;
+
+	My_DB.set_tablesize(3000); //3K table size
+
+	//Create a type named testtype
+	My_DB.create_type("Testtype");
+
+	//Create an integer valued property named Int_prop
+	My_DB.add_property("Testtype","Int_prop",_INT_);
+
+	//Create 5000 objects and assign random values to
+	//the attribute named Int_prop for each object.
+	cout&lt &lt "\nCreating 50000 objects ...";
+	i=0;
+	while (i++&lt 50000){
+
+		//Create an object and assign o to reference it
+		o=My_DB.create_instance("Testtype");
+
+		//generate a random number in [0..4000]
+		v=rand()%4000;
+
+		//set the property named Int_prop of the object o
+		//to v
+		o-&gtsetproperty_value("Int_prop",(ODB_INT)v);
+	};
+	cout&lt &lt "Done\n";
+
+	//Now, lets find all objects with Int_prop = 2345
+	//the probability that this number is less than 1
+	//Thus, it may be the case that no object exists
+	//with that property value. To make sure there is
+	//atleast one such object we simply assign an object
+	//that value for the property.
+
+	//To make sure we do this right we first find out the
+	//OID of the last object. Then we subtract a number less
+	//than 50000 from the OID. We now have an OID to one of
+	//the 50000 object we just generated. Retrieve it and
+	//set the value.
+	i=0;
+	My_DB.getproperty_value(o,"OID", &(ODB_INT)i);
+	i=i-rand()%45000;
+	o=My_DB.getobjectwithoid("Testtype",i);
+	o-&gtsetproperty_value("Int_prop",(ODB_INT)1234);
+
+	//Now that we know there is an object with 1234 as
+	//value for the Int_prop property we can start to
+	//search for it.
+	obuf.reset_buffer();
+	q_stream=My_DB.open_stream("Testtype","Int_prop","=",(ODB_INT)1234);
+
+	//All set for test search. Start timer and go for it
+	ftime(&t1);
+	o=My_DB.get(q_stream);
+	while (o!=NULL){
+		o-&gtdisplay(obuf);
+		cout&lt &lt obuf.get_buffer()&lt &lt '\n';
+		obuf.reset_buffer();
+		o=My_DB.get(q_stream);
+		};
+
+	//All objects found, stop timer and check time
+	ftime(&t2);
+	elapsed_time=(t2.time*1000+t2.millitm)-(t1.time*1000+t1.millitm);
+	cout&lt &lt "\The search took "&lt &lt elapsed_time&lt &lt "millisec without index";
+
+	//Now, build an index and redo the whole procedure.
+	cout&lt &lt "\nBuilding index ...";
+	My_DB.create_index("Testtype", "Int_prop");
+	cout&lt &lt "Done\n";
+
+	//reset the stream
+	My_DB.reset_stream(q_stream);
+	obuf.reset_buffer();
+	ftime(&t1);
+	o=My_DB.get(q_stream);
+	while (o!=NULL){
+		o-&gtdisplay(obuf);
+		cout&lt &lt obuf.get_buffer()&lt &lt '\n';
+		obuf.reset_buffer();
+		o=My_DB.get(q_stream);
+		};
+	ftime(&t2);
+	elapsed_time=(t2.time*1000+t2.millitm)-(t1.time*1000+t1.millitm);
+	cout&lt &lt "\The search took "&lt &lt elapsed_time&lt &lt "millisec with index";
+
+	//-------------------------------------------------
+	//--                I M P O R T A N T            --
+	//-------------------------------------------------
+	//-- Since the application now no longer need the--
+	//-- 50000objects etc we now deallocate them     --
+	//-- There are several ways of doing this.       --
+	//-- 1: Open a stream over all Testtype objects  --
+	//-- and deallocate them one by one.             --
+	//-- 2: Since the type named Testtype is not     --
+	//-- wanted anymore we simply delete the type    --
+	//-- and let ODB do the hard work of deallocating--
+	//-- everything, e.g. objects indexes ......     --
+	//--                                             --
+	//-- And also, we allocated a stream local to    --
+	//-- to this function. This function must be     --
+	//-- deallocated to prevent memory leak.         --
+	//-------------------------------------------------
+
+	My_DB.delete_type("Testtype");
+	My_DB.close_stream(q_stream);
+
+	//It is now ok to exit this function
+
+}
+int main (void){
+database My_DB("");
+
+int retval;
+	retval=My_DB.load_database("Compdb.odb");
+	if (retval&lt 0) cout&lt &lt "\n Failed to load company database ";
+	else {
+		cout&lt &lt "\n The company database is loaded";
+		My_DB.display(obuf);
+		cout&lt &lt "\n"&lt &lt obuf.get_buffer();
+		obuf.reset_buffer();
+		};
+
+	//display the schema of the loaded database
+	display_schema(My_DB);
+
+	//let the user select and browse a type extent
+	select_type(My_DB);
+
+	//demonstrate the search interface
+	find_all_janitors(My_DB);
+
+	//show the benefit of indexing when the database
+	//is large
+	demonstrate_index(My_DB);
+
+	cout&lt &lt "\nODB Demo is now finished\n";
+	return 1;
+};
+</PRE>
+<HR>
+</BODY>
+</HTML>
+
